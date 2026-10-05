@@ -1,0 +1,120 @@
+$bg: #0e332b;
+$bg-alt: #123d33;
+$card-bg: #153f34;
+$brass: #b87333;
+$brass-light: #cf9a5c;
+$cream: #f2e6cd;
+$cream-dim: #c9bfa6;
+$muted: #8fa89c;
+$border: rgba(184, 115, 51, 0.35);
+$green-ok: #6fae7d;
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: $bg;
+  color: $cream;
+  font-family: 'HT Moshreq Pro', sans-serif;
+}
+
+.admin-header {
+  background: $bg-alt;
+  border-bottom: 1px solid $border;
+  padding: 18px 28px;
+}
+.admin-logo { font-family: 'HT Rakeez', sans-serif; font-size: 18px; color: $brass-light; }
+
+.btn-brass {
+  background: $brass; color: $bg; border: none; border-radius: 2px; font-weight: 500; padding: 10px 22px;
+  &:hover { background: $brass-light; }
+}
+.btn-outline-brass {
+  border: 1px solid $brass; color: $brass-light; background: transparent; border-radius: 2px; padding: 10px 22px;
+  &:hover { background: $brass; color: $bg; }
+}
+
+.tabs-bar { border-bottom: 1px solid $border; margin-bottom: 26px; }
+.tab-btn {
+  background: none; border: none; padding: 12px 4px;
+  color: $muted; font-size: 15px; border-bottom: 2px solid transparent;
+  &:hover { color: $cream-dim; }
+  &.active { color: $brass-light; border-color: $brass; font-weight: 500; }
+}
+
+.section-count { color: $cream-dim; font-size: 14px; }
+
+// ============ جدول ============
+.table-wrap { border: 1px solid $border; border-radius: 4px; overflow: hidden; }
+.admin-table { width: 100%; border-collapse: collapse; }
+.admin-table thead { background: $bg-alt; }
+.admin-table th {
+  text-align: right; padding: 14px 18px; font-size: 13px; color: $brass-light;
+  font-weight: 500; letter-spacing: .5px; border-bottom: 1px solid $border;
+}
+.admin-table td {
+  padding: 14px 18px; font-size: 14.5px; color: $cream-dim; border-bottom: 1px solid $border;
+}
+.admin-table tbody tr:last-child td { border-bottom: none; }
+.admin-table tbody tr:hover { background: rgba(184,115,51,.05); }
+.empty-row { text-align: center; color: $muted; padding: 30px 0; }
+
+.actions { display: flex; gap: 14px; }
+.link-btn {
+  background: none; border: none; color: $brass-light; font-size: 13.5px; padding: 0;
+  &:hover { text-decoration: underline; }
+  &.danger { color: #d9765a; }
+}
+
+// ============ مفتاح فتح/غلق ============
+.switch {
+  position: relative; display: inline-block; width: 40px; height: 22px; vertical-align: middle; margin-left: 8px;
+  input { opacity: 0; width: 0; height: 0; }
+}
+.slider {
+  position: absolute; cursor: pointer; inset: 0;
+  background: $bg; border: 1px solid $border; border-radius: 22px; transition: .2s;
+  &::before {
+    content: ""; position: absolute; height: 14px; width: 14px; right: 4px; bottom: 3px;
+    background: $muted; border-radius: 50%; transition: .2s;
+  }
+}
+input:checked + .slider { background: rgba(111,174,125,.15); border-color: $green-ok; }
+input:checked + .slider::before { background: $green-ok; transform: translateX(-18px); }
+
+.status-text { font-size: 13px; color: $muted; vertical-align: middle; }
+.status-text.open { color: $green-ok; }
+
+// ============ مودال الإضافة/التعديل ============
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.6);
+  display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+}
+.modal-box {
+  background: $card-bg; border: 1px solid $border; border-radius: 4px;
+  padding: 32px; width: 100%; max-width: 640px; max-height: 90vh; overflow-y: auto;
+}
+.modal-title { font-family: 'HT Rakeez', sans-serif; font-size: 20px; color: $cream; margin-bottom: 24px; }
+
+.form-label { color: $cream-dim; font-size: 13.5px; margin-bottom: 6px; }
+.form-control, .form-select {
+  background: $bg; border: 1px solid $border; color: $cream; border-radius: 4px; padding: 9px 12px; font-size: 14px;
+  &:focus { background: $bg; border-color: $brass; color: $cream; box-shadow: 0 0 0 3px rgba(184,115,51,.15); }
+}
+
+@media (max-width: 768px) {
+  .admin-table { font-size: 13px; }
+  .admin-table th, .admin-table td { padding: 10px 12px; }
+}
+.hint { color: $cream-dim; font-size: 12px; opacity: .8; display: block; margin-top: 4px; }
+.units-editor { border-top: 1px solid $border; padding-top: 16px; }
+.unit-box { border: 1px solid $border; border-radius: 4px; padding: 12px; margin-bottom: 12px; }
+.lesson-box { background: rgba(255,255,255,.03); border-radius: 4px; padding: 10px; margin-bottom: 10px; }
+.duration-input { max-width: 90px; }
+.lock-check { color: $cream-dim; font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+.article-body-input { line-height: 1.9; min-height: 220px; }
+.testi-cell { max-width: 420px; white-space: pre-wrap; }
+.quiz-editor { border-top: 1px dashed $border; margin-top: 10px; padding-top: 10px; }
+.quiz-label { color: $cream-dim; font-size: 12.5px; }
+.q-box { background: rgba(0,0,0,.18); border-radius: 4px; padding: 10px; margin-bottom: 10px; }
+.opt-row input[type='radio'] { accent-color: $brass; flex-shrink: 0; }

@@ -1,0 +1,84 @@
+<app-site-nav></app-site-nav>
+
+<section class="page-hero text-center">
+  <div class="hero-deco" aria-hidden="true"><span class="glow"></span><span class="big-star"></span><i class="p p1"></i><i class="p p2"></i><i class="p p3"></i><i class="p p4"></i></div>
+  <div class="container">
+    <div class="divider in-up" style="--d:.05s"><span class="line"></span><span class="star"></span><span class="line"></span></div>
+    <h1 class="page-title"><span class="ln"><span class="w" style="--d:.15s">تقدمي</span> <span class="w shimmer" style="--d:.25s">ودرجاتي</span></span></h1>
+    <p class="page-sub mx-auto in-up" style="--d:.45s">تابعي مستواكي في كل كورس ودرجاتك في الامتحانات القصيرة</p>
+  </div>
+</section>
+
+<section class="progress-section">
+  <div class="container">
+
+    <div class="row g-3 mb-5 justify-content-center" *ngIf="rows().length > 0">
+      <div class="col-6 col-md-3 reveal" style="--d:0s">
+        <div class="stat-box"><div class="stat-num">{{ summary().courses }}</div><div class="stat-label">كورس بدأتيه</div></div>
+      </div>
+      <div class="col-6 col-md-3 reveal" style="--d:.12s">
+        <div class="stat-box"><div class="stat-num">{{ summary().lessons }}</div><div class="stat-label">درس خلّصتيه</div></div>
+      </div>
+      <div class="col-6 col-md-3 reveal" style="--d:.24s">
+        <div class="stat-box">
+          <div class="stat-num">{{ summary().avg !== null ? summary().avg + '%' : '—' }}</div>
+          <div class="stat-label">متوسط درجات الامتحانات</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="course-block reveal" *ngFor="let r of rows()">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div class="d-flex align-items-center gap-3">
+          <div class="ring" [class.full]="r.pct === 100" [style.--p]="r.pct" role="img" [attr.aria-label]="r.pct + '%'">
+            <svg viewBox="0 0 60 60"><circle class="trk" cx="30" cy="30" r="26"/><circle class="val" cx="30" cy="30" r="26"/></svg>
+            <span class="pct">{{ r.pct }}%</span>
+          </div>
+          <div>
+            <h2 class="course-name">{{ r.title }}</h2>
+            <p class="course-meta">
+              <span>{{ r.done }} / {{ r.total }} درس</span>
+              <span class="avg" *ngIf="r.avg !== null">متوسط الامتحانات {{ r.avg }}%</span>
+            </p>
+          </div>
+        </div>
+        <a [routerLink]="['/courses', r.courseId]" class="btn btn-outline-brass px-4">كمّلي الكورس</a>
+      </div>
+
+      <div class="bar"><span [style.width.%]="r.pct"></span></div>
+
+      <div class="table-wrap">
+        <table class="lessons-table">
+          <thead>
+            <tr><th>الدرس</th><th>الحالة</th><th>أعلى درجة</th><th>المحاولات</th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let l of r.lessons; let i = index" [style.--d]="(i < 10 ? i * 50 : 0) + 'ms'">
+              <td>{{ l.title }}</td>
+              <td>
+                <span class="tag ok" *ngIf="l.status === 'passed'">✓ مكتمل</span>
+                <span class="tag wait" *ngIf="l.status === 'waiting'">في انتظار الامتحان</span>
+                <span class="tag new" *ngIf="l.status === 'new'">لسه</span>
+              </td>
+              <td><span class="score" [class.good]="l.score !== null && l.score >= 60" [class.low]="l.score !== null && l.score < 60">{{ l.score !== null ? l.score + '%' : '—' }}</span></td>
+              <td>{{ l.attempts || '—' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <ng-container *ngIf="rows().length === 0">
+      <div class="row g-3 justify-content-center" *ngIf="loading()">
+        <span class="visually-hidden">جاري التحميل...</span>
+        <div class="col-12 col-md-9"><div class="skeleton"></div></div>
+      </div>
+      <div class="text-center py-5 empty" *ngIf="!loading()">
+        <span class="empty-star" aria-hidden="true"></span>
+        <p class="empty-title">لسه مبدأتيش أي كورس</p>
+        <a routerLink="/courses" class="btn btn-brass shine px-4 py-3 mt-3">تصفح الكورسات</a>
+      </div>
+    </ng-container>
+
+  </div>
+</section>

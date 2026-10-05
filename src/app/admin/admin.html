@@ -1,0 +1,315 @@
+<header class="admin-header d-flex justify-content-between align-items-center">
+  <p class="admin-logo">لوحة تحكم المدرس</p>
+  <button class="btn btn-outline-brass" (click)="logout()">تسجيل الخروج</button>
+</header>
+
+<div class="container py-4">
+
+  <div class="alert alert-danger" *ngIf="errorMsg()">{{ errorMsg() }}</div>
+
+  <div class="tabs-bar d-flex gap-4">
+    <button type="button" class="tab-btn" [class.active]="activeTab() === 'courses'" (click)="setTab('courses')">
+      الكورسات
+    </button>
+    <button type="button" class="tab-btn" [class.active]="activeTab() === 'articles'" (click)="setTab('articles')">
+      المقالات
+    </button>
+    <button type="button" class="tab-btn" [class.active]="activeTab() === 'testimonials'" (click)="setTab('testimonials')">
+      آراء الطلاب
+    </button>
+  </div>
+
+  <!-- ========================= كورسات ========================= -->
+  <div *ngIf="activeTab() === 'courses'" class="tab-content">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <p class="section-count">{{ courses().length }} كورس</p>
+      <button class="btn btn-brass" (click)="openAddCourse()">+ إضافة كورس</button>
+    </div>
+
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>العنوان</th>
+            <th>المادة</th>
+            <th>السعر</th>
+            <th>الحالة</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let course of courses()">
+            <td>{{ course.title }}</td>
+            <td>{{ course.subject === 'history' ? 'تاريخ' : course.subject === 'geography' ? 'جغرافيا' : 'مراجعة' }}</td>
+            <td>{{ course.price }} ج.م</td>
+            <td>
+              <label class="switch">
+                <input type="checkbox" [checked]="course.isOpen" (change)="toggleCourseOpen(course)">
+                <span class="slider"></span>
+              </label>
+              <span class="status-text" [class.open]="course.isOpen">
+                {{ course.isOpen ? 'متاح' : 'مغلق' }}
+              </span>
+            </td>
+            <td class="actions">
+              <button class="link-btn" (click)="openEditCourse(course)">تعديل</button>
+              <button class="link-btn danger" (click)="deleteCourse(course.id)">حذف</button>
+            </td>
+          </tr>
+          <tr *ngIf="loading()">
+            <td colspan="5" class="empty-row">جاري التحميل...</td>
+          </tr>
+          <tr *ngIf="!loading() && courses().length === 0">
+            <td colspan="5" class="empty-row">مفيش كورسات مضافة لسه</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========================= مقالات ========================= -->
+  <div *ngIf="activeTab() === 'articles'" class="tab-content">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <p class="section-count">{{ articles().length }} مقالة</p>
+      <button class="btn btn-brass" (click)="openAddArticle()">+ إضافة مقالة</button>
+    </div>
+
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>العنوان</th>
+            <th>التصنيف</th>
+            <th>التاريخ</th>
+            <th>الحالة</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let article of articles()">
+            <td>{{ article.title }}</td>
+            <td>{{ article.category }}</td>
+            <td>{{ dateOf(article) }}</td>
+            <td>
+              <label class="switch">
+                <input type="checkbox" [checked]="article.isPublished" (change)="toggleArticlePublish(article)">
+                <span class="slider"></span>
+              </label>
+              <span class="status-text" [class.open]="article.isPublished">
+                {{ article.isPublished ? 'منشورة' : 'مخفية' }}
+              </span>
+            </td>
+            <td class="actions">
+              <button class="link-btn" (click)="openEditArticle(article)">تعديل</button>
+              <button class="link-btn danger" (click)="deleteArticle(article.id)">حذف</button>
+            </td>
+          </tr>
+          <tr *ngIf="articles().length === 0">
+            <td colspan="5" class="empty-row">مفيش مقالات مضافة لسه</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========================= آراء الطلاب ========================= -->
+  <div *ngIf="activeTab() === 'testimonials'" class="tab-content">
+    <p class="section-count mb-3">{{ testimonials().length }} رأي (الصفحة الرئيسية بتعرض آخر 3 بس)</p>
+
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>الطالب</th>
+            <th>الرأي</th>
+            <th>التاريخ</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of testimonials()">
+            <td>{{ t.userName }}</td>
+            <td class="testi-cell">{{ t.text }}</td>
+            <td>{{ dateOf(t) }}</td>
+            <td class="actions">
+              <button class="link-btn danger" (click)="deleteTestimonial(t.id)">حذف</button>
+            </td>
+          </tr>
+          <tr *ngIf="testimonials().length === 0">
+            <td colspan="4" class="empty-row">مفيش آراء لسه</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ========================= مودال إضافة/تعديل كورس ========================= -->
+<div class="modal-overlay" *ngIf="showCourseForm()">
+  <div class="modal-box">
+    <h2 class="modal-title">{{ editingCourseId ? 'تعديل الكورس' : 'إضافة كورس جديد' }}</h2>
+
+    <form (ngSubmit)="saveCourse()">
+      <div class="mb-3">
+        <label class="form-label">عنوان الكورس</label>
+        <input type="text" class="form-control" [(ngModel)]="courseForm.title" name="title" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">الوصف المختصر (تحت العنوان)</label>
+        <input type="text" class="form-control" [(ngModel)]="courseForm.tag" name="tag">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">وصف الكارت</label>
+        <textarea class="form-control" rows="2" [(ngModel)]="courseForm.desc" name="desc"></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">رابط فيديو المعاينة (اختياري)</label>
+        <input type="url" class="form-control" [(ngModel)]="courseForm.videoUrl" name="videoUrl" dir="ltr"
+               placeholder="https://www.youtube.com/watch?v=...">
+        <small class="hint">يوتيوب (يفضّل Unlisted) / فيميو / جوجل درايف / ملف mp4 مباشر</small>
+        <small class="text-danger d-block" *ngIf="courseForm.videoUrl && !isValidVideo(courseForm.videoUrl)">
+          الرابط ده مش مدعوم، جرّب رابط يوتيوب أو فيميو أو درايف
+        </small>
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col-6">
+          <label class="form-label">اسم المدرس (اختياري)</label>
+          <input type="text" class="form-control" [(ngModel)]="courseForm.instructorName" name="instructorName"
+                 placeholder="لو سيبتيه فاضي: أ. أكمل على">
+        </div>
+        <div class="col-6">
+          <label class="form-label">وصف المدرس (اختياري)</label>
+          <input type="text" class="form-control" [(ngModel)]="courseForm.instructorRole" name="instructorRole"
+                 placeholder="مثال: مدرس تاريخ">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">الوصف الكامل (صفحة الكورس)</label>
+        <textarea class="form-control" rows="3" [(ngModel)]="courseForm.fullDesc" name="fullDesc"></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">هتخرج من الكورس عارف (كل نقطة في سطر)</label>
+        <textarea class="form-control" rows="3" [(ngModel)]="outcomesText" name="outcomesText"></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">الكورس يشمل (كل نقطة في سطر)</label>
+        <textarea class="form-control" rows="3" [(ngModel)]="includesText" name="includesText"></textarea>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-6">
+          <label class="form-label">السعر</label>
+          <input type="number" class="form-control" [(ngModel)]="courseForm.price" name="price">
+        </div>
+        <div class="col-6">
+          <label class="form-label">المادة</label>
+          <select class="form-select" [(ngModel)]="courseForm.subject" name="subject">
+            <option value="history">تاريخ</option>
+            <option value="geography">جغرافيا</option>
+            <option value="review">مراجعة</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ====== الوحدات والحصص ====== -->
+      <div class="units-editor mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <label class="form-label mb-0">محتوى الكورس (الوحدات والحصص)</label>
+          <button type="button" class="link-btn" (click)="addUnit()">+ وحدة</button>
+        </div>
+
+        <div class="unit-box" *ngFor="let unit of courseForm.units; let ui = index">
+          <div class="d-flex gap-2 mb-2">
+            <input type="text" class="form-control" [(ngModel)]="unit.title" [name]="'unitTitle' + ui"
+                   placeholder="عنوان الوحدة">
+            <button type="button" class="link-btn danger" (click)="removeUnit(ui)">حذف</button>
+          </div>
+
+          <div class="lesson-box" *ngFor="let lesson of unit.lessons; let li = index">
+            <div class="d-flex gap-2 mb-2">
+              <input type="text" class="form-control" [(ngModel)]="lesson.title" [name]="'lessonTitle' + ui + '_' + li"
+                     placeholder="عنوان الحصة">
+              <input type="text" class="form-control duration-input" [(ngModel)]="lesson.duration"
+                     [name]="'lessonDur' + ui + '_' + li" placeholder="18 د">
+            </div>
+            <input type="url" class="form-control mb-1" dir="ltr" [(ngModel)]="lesson.videoUrl"
+                   [name]="'lessonUrl' + ui + '_' + li" placeholder="رابط فيديو الحصة">
+            <small class="text-danger d-block" *ngIf="lesson.videoUrl && !isValidVideo(lesson.videoUrl)">
+              الرابط ده مش مدعوم
+            </small>
+            <div class="d-flex justify-content-between align-items-center mt-1">
+              <label class="lock-check">
+                <input type="checkbox" [(ngModel)]="lesson.locked" [name]="'lessonLock' + ui + '_' + li">
+                للمشتركين في الكورس بس
+              </label>
+              <button type="button" class="link-btn danger" (click)="removeLesson(unit, li)">حذف الحصة</button>
+            </div>
+
+            <!-- امتحان الحصة -->
+            <div class="quiz-editor">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="quiz-label">امتحان بعد الحصة ({{ lesson.quiz?.length || 0 }} سؤال) — لو فاضي الدرس بيتفتح اللي بعده بمجرد المشاهدة</span>
+                <button type="button" class="link-btn" (click)="addQuestion(lesson)">+ سؤال</button>
+              </div>
+
+              <div class="q-box" *ngFor="let q of lesson.quiz; let qi = index">
+                <div class="d-flex gap-2 mb-2">
+                  <input type="text" class="form-control" [(ngModel)]="q.q" [name]="'q' + ui + '_' + li + '_' + qi"
+                         placeholder="نص السؤال">
+                  <button type="button" class="link-btn danger" (click)="removeQuestion(lesson, qi)">حذف</button>
+                </div>
+                <div class="opt-row d-flex align-items-center gap-2 mb-1" *ngFor="let opt of q.options; let oi = index; trackBy: trackIndex">
+                  <input type="radio" [name]="'ans' + ui + '_' + li + '_' + qi" [value]="oi" [(ngModel)]="q.answer"
+                         title="دي الإجابة الصحيحة">
+                  <input type="text" class="form-control form-control-sm" [(ngModel)]="q.options[oi]"
+                         [name]="'o' + ui + '_' + li + '_' + qi + '_' + oi" [placeholder]="'الاختيار ' + (oi + 1)">
+                </div>
+                <small class="hint">اختاري الدايرة جنب الإجابة الصحيحة</small>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="link-btn" (click)="addLesson(unit)">+ حصة</button>
+        </div>
+
+        <p class="hint" *ngIf="!courseForm.units?.length">لسه مفيش وحدات، دوسي "+ وحدة" عشان تبدئي</p>
+      </div>
+
+      <div class="modal-actions d-flex gap-3">
+        <button type="submit" class="btn btn-brass flex-fill" [disabled]="saving()">{{ saving() ? 'جاري الحفظ...' : 'حفظ' }}</button>
+        <button type="button" class="btn btn-outline-brass flex-fill" (click)="closeCourseForm()">إلغاء</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ========================= مودال إضافة/تعديل مقالة ========================= -->
+<div class="modal-overlay" *ngIf="showArticleForm()">
+  <div class="modal-box">
+    <h2 class="modal-title">{{ editingArticleId ? 'تعديل المقالة' : 'إضافة مقالة جديدة' }}</h2>
+
+    <form (ngSubmit)="saveArticle()">
+      <div class="mb-3">
+        <label class="form-label">عنوان المقالة</label>
+        <input type="text" class="form-control" [(ngModel)]="articleForm.title" name="title" required>
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col-6">
+          <label class="form-label">التصنيف</label>
+          <input type="text" class="form-control" [(ngModel)]="articleForm.category" name="category" placeholder="مثال: تاريخ">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">نص المقالة</label>
+        <textarea class="form-control article-body-input" rows="12" [(ngModel)]="articleForm.body" name="body"
+                  placeholder="اكتب المقالة هنا... سيب سطر فاضي بين كل فقرة والتانية"></textarea>
+      </div>
+
+      <div class="modal-actions d-flex gap-3">
+        <button type="submit" class="btn btn-brass flex-fill" [disabled]="saving()">{{ saving() ? 'جاري الحفظ...' : 'حفظ' }}</button>
+        <button type="button" class="btn btn-outline-brass flex-fill" (click)="closeArticleForm()">إلغاء</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,239 @@
+// ============ متغيرات الهوية البصرية (نفس متغيرات باقي الصفحات) ============
+$bg: #0e332b;
+$bg-alt: #123d33;
+$card-bg: #153f34;
+$brass: #b87333;
+$brass-light: #cf9a5c;
+$cream: #f2e6cd;
+$cream-dim: #c9bfa6;
+$muted: #8fa89c;
+$border: rgba(184, 115, 51, 0.35);
+
+:host {
+  display: block;
+  background: $bg;
+  color: $cream;
+  font-family: 'HT Moshreq Pro', sans-serif;
+  line-height: 1.8;
+}
+
+a { color: inherit; text-decoration: none; }
+
+// ============ الأزرار (نفس تنسيق باقي الصفحات) ============
+.btn-brass {
+  background: $brass; color: $bg; border: none; border-radius: 2px; font-weight: 500;
+  &:hover { background: $brass-light; color: $bg; }
+}
+.btn-outline-brass {
+  border: 1px solid $brass; color: $brass-light; background: transparent; border-radius: 2px;
+  &:hover { background: $brass; color: $bg; }
+}
+
+// ============ الهيدر العلوي ============
+.detail-hero {
+  padding: 40px 0 50px;
+  background:
+    radial-gradient(ellipse 700px 400px at 20% 10%, rgba(184, 115, 51, .07), transparent 60%);
+}
+.breadcrumb {
+  font-size: 13px; margin-bottom: 24px;
+  a { color: $cream-dim; &:hover { color: $brass-light; } }
+  .active { color: $brass-light; }
+}
+.course-tag { font-size: 13px; color: $brass-light; letter-spacing: 2px; margin-bottom: 12px; }
+.course-title { font-family: 'HT Rakeez', sans-serif; font-weight: 700; font-size: 30px; color: $cream; margin-bottom: 14px; }
+.course-lead { color: $cream-dim; font-size: 15.5px; margin-bottom: 20px; max-width: 640px; }
+.meta-row { font-size: 13.5px; color: $muted; }
+.meta-item i { color: $brass-light; font-style: normal; }
+
+// ============ جسم الصفحة ============
+.detail-body { padding: 20px 0 90px; }
+
+.thumb-preview {
+  height: 320px;
+  background: linear-gradient(135deg, #1a4a3d, #0c2a22);
+  border: 1px solid $border;
+  border-radius: 4px;
+  color: $brass-light;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+// ============ التابات ============
+.tabs-bar {
+  border-bottom: 1px solid $border;
+  margin-bottom: 30px;
+}
+.tab-btn {
+  background: none; border: none; padding: 12px 4px;
+  color: $muted; font-family: 'HT Moshreq Pro', sans-serif; font-size: 15px;
+  border-bottom: 2px solid transparent;
+  transition: color .2s, border-color .2s;
+
+  &:hover { color: $cream-dim; }
+  &.active { color: $brass-light; border-color: $brass; font-weight: 500; }
+}
+
+// ============ محتوى تاب الوصف ============
+.panel-heading { font-family: 'HT Rakeez', sans-serif; font-size: 20px; color: $cream; margin-bottom: 14px; }
+.panel-text { color: $cream-dim; font-size: 15.5px; }
+
+.checklist {
+  list-style: none; padding: 0;
+  li {
+    display: flex; align-items: center; gap: 10px;
+    color: $cream-dim; font-size: 15px; margin-bottom: 12px;
+    .check { color: $brass; font-weight: 700; }
+  }
+}
+
+.instructor-card {
+  background: $card-bg; border: 1px solid $border; border-radius: 4px; padding: 18px 20px;
+}
+.instructor-avatar {
+  width: 46px; height: 46px; border-radius: 50%;
+  background: $brass; color: $bg; font-family: 'HT Rakeez', sans-serif; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.instructor-name { font-size: 15px; color: $cream; font-weight: 500; }
+.instructor-role { font-size: 13px; color: $muted; }
+
+// ============ محتوى تاب الكورس (أكورديون) ============
+.units-summary { font-size: 13.5px; color: $muted; margin-bottom: 16px; }
+
+.unit-block {
+  border: 1px solid $border; border-radius: 4px; margin-bottom: 14px; overflow: hidden;
+}
+.unit-header {
+  width: 100%; background: $card-bg; border: none; padding: 16px 20px;
+  color: $cream; font-family: 'HT Moshreq Pro', sans-serif; font-size: 15.5px; font-weight: 500;
+}
+.unit-toggle { color: $brass-light; font-size: 20px; }
+
+.lesson-list { list-style: none; padding: 0; margin: 0; }
+.lesson-item {
+  padding: 14px 20px; border-top: 1px solid $border;
+  font-size: 14.5px; color: $cream-dim;
+}
+.lesson-icon { margin-left: 8px; color: $brass-light; }
+.lesson-duration { color: $muted; font-size: 13px; }
+
+// ============ محتوى تاب التقييمات ============
+.review-card {
+  border-bottom: 1px solid $border; padding: 20px 0;
+  &:first-child { padding-top: 0; }
+}
+.review-name { font-size: 14.5px; color: $cream; font-weight: 500; }
+.review-stars { color: $brass-light; font-size: 13px; }
+.review-text { color: $cream-dim; font-size: 14.5px; }
+
+// ============ صندوق الاشتراك الجانبي ============
+.enroll-card {
+  background: $card-bg; border: 1px solid $border; border-radius: 4px; padding: 26px 24px;
+  position: sticky; top: 100px;
+}
+.enroll-price { font-family: 'HT Rakeez', sans-serif; font-size: 30px; color: $brass-light; margin-bottom: 20px; }
+
+.includes-list {
+  list-style: none; padding: 0; margin: 20px 0 0; border-top: 1px solid $border; padding-top: 18px;
+  li {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; color: $cream-dim; margin-bottom: 12px;
+    .dot { width: 5px; height: 5px; background: $brass; border-radius: 50%; flex-shrink: 0; }
+  }
+}
+
+@media (max-width: 991px) {
+  .enroll-card { position: static; margin-top: 30px; }
+  .course-title { font-size: 24px; }
+}
+.player-wrap {
+  position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000;
+  border: 1px solid $border; border-radius: 4px; overflow: hidden; margin-bottom: 12px;
+  iframe, video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+}
+.now-playing { color: $brass-light; font-size: 14px; margin-bottom: 24px; }
+.lesson-item { cursor: pointer; &:hover { background: rgba(255,255,255,.03); } }
+.empty-note { color: $muted; font-size: 14px; padding: 16px 0; }
+.lock-msg { color: $brass-light; font-size: 14px; padding: 10px 0; }
+
+.yt-wrap { position: absolute; inset: 0; }
+.yt-wrap ::ng-deep iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.now-row { margin-bottom: 24px; .now-playing { margin: 0; } }
+.rate-btn {
+  background: transparent; border: 1px solid $border; color: $brass-light; border-radius: 2px;
+  padding: 4px 16px; font-size: 13.5px; font-family: inherit;
+  &:hover { background: $brass; color: $bg; }
+}
+.lesson-rating { color: $brass-light; font-size: 12.5px; }
+.fav-on { background: $brass; color: $bg; }
+.enrolled-badge {
+  text-align: center; padding: 14px; border: 1px solid #5fae7e; border-radius: 2px;
+  background: rgba(95,174,126,.14); color: #8fd6a9; font-weight: 500;
+}
+.enroll-msg { color: #e07856; font-size: 13.5px; margin: -4px 0 12px; }
+
+// ============ إشعار التقييم ============
+.rate-toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  z-index: 2000; width: calc(100% - 32px); max-width: 360px; text-align: center;
+  background: $card-bg; border: 1px solid $brass; border-radius: 6px;
+  padding: 18px 22px; box-shadow: 0 10px 40px rgba(0,0,0,.45);
+  animation: toast-in .25s ease-out;
+}
+@keyframes toast-in { from { opacity: 0; transform: translate(-50%, 16px); } to { opacity: 1; transform: translate(-50%, 0); } }
+.toast-title { font-family: 'HT Rakeez', sans-serif; color: $cream; font-size: 16px; margin: 0 0 4px; }
+.toast-lesson { color: $muted; font-size: 13px; margin: 0 0 10px; }
+.toast-close {
+  position: absolute; top: 6px; left: 10px; background: none; border: none;
+  color: $muted; font-size: 22px; line-height: 1;
+  &:hover { color: $cream; }
+}
+.toast-stars { display: flex; justify-content: center; gap: 4px; direction: ltr; }
+.star-btn {
+  background: none; border: none; font-size: 34px; line-height: 1; color: $border; padding: 0 2px;
+  transition: transform .15s, color .15s;
+  &.on { color: #f0b93a; }
+  &:hover { transform: scale(1.2); }
+}
+.toast-stars-static { color: #f0b93a; font-size: 22px; letter-spacing: 3px; margin: 0; }
+
+// ============ التقدم والامتحان ============
+.bar {
+  height: 8px; background: rgba(255,255,255,.08); border-radius: 4px; overflow: hidden;
+  span { display: block; height: 100%; background: $brass; transition: width .4s; }
+  &.big { height: 12px; }
+}
+.watch-box {
+  background: $card-bg; border: 1px solid $border; border-radius: 4px; padding: 12px 16px; margin-bottom: 16px;
+  small { color: $cream-dim; font-size: 13px; }
+  .warn { color: #e0a456; display: block; margin-top: 8px; }
+}
+.progress-strip {
+  background: $card-bg; border: 1px solid $border; border-radius: 4px; padding: 14px 16px; margin-bottom: 24px;
+  font-size: 14px; color: $cream-dim;
+}
+.quiz-panel {
+  background: $card-bg; border: 1px solid $brass; border-radius: 6px; padding: 24px; margin-bottom: 28px;
+  &.passed { border-color: #5fae7e; }
+}
+.quiz-title { font-family: 'HT Rakeez', sans-serif; font-size: 20px; color: $cream; margin: 0 0 6px; }
+.quiz-sub { color: $muted; font-size: 13.5px; margin-bottom: 18px; }
+.quiz-q { margin-bottom: 18px; }
+.q-text { color: $cream; font-size: 16px; margin-bottom: 8px; }
+.q-opt {
+  display: flex; align-items: center; gap: 10px; padding: 9px 14px; margin-bottom: 6px; cursor: pointer;
+  border: 1px solid $border; border-radius: 4px; color: $cream-dim; transition: all .15s;
+  input { accent-color: $brass; }
+  &:hover { border-color: $brass; }
+  &.sel { border-color: $brass; background: rgba(184,115,51,.12); color: $cream; }
+  &.bad { border-color: #e07856; background: rgba(224,120,86,.12); }
+}
+.quiz-result {
+  padding: 10px 14px; border-radius: 4px; font-size: 14px; margin-top: 8px;
+  &.fail { background: rgba(224,120,86,.12); color: #f0a58c; }
+  &.ok { background: rgba(95,174,126,.14); color: #8fd6a9; }
+}
+.lesson-item.is-locked { opacity: .55; }
+.lesson-item.is-current { background: rgba(184,115,51,.1); }
+.lesson-score { color: #8fd6a9; font-size: 12.5px; }

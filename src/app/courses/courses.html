@@ -1,0 +1,94 @@
+<app-site-nav></app-site-nav>
+
+<!-- ========================= Page header ========================= -->
+<section class="page-hero text-center">
+  <div class="hero-deco" aria-hidden="true"><span class="glow"></span><span class="big-star"></span><i class="p p1"></i><i class="p p2"></i><i class="p p3"></i><i class="p p4"></i></div>
+  <div class="container">
+    <nav aria-label="breadcrumb" class="in-up" style="--d:.05s">
+      <ol class="breadcrumb justify-content-center">
+        <li class="breadcrumb-item"><a routerLink="/">الرئيسية</a></li>
+        <li class="breadcrumb-item active" aria-current="page">الكورسات</li>
+      </ol>
+    </nav>
+    <h1 class="page-title"><span class="ln"><span class="w" style="--d:.15s">كل</span> <span class="w shimmer" style="--d:.25s">الكورسات</span></span></h1>
+    <p class="page-sub mx-auto in-up" style="--d:.45s">اختار المادة والمرحلة اللي تناسبك وابدأ المذاكرة بطريقة مرتبة</p>
+  </div>
+</section>
+
+<!-- ========================= Filters ========================= -->
+<section class="filters-section">
+  <div class="container in-up" style="--d:.6s">
+    <div class="row g-3 align-items-center">
+      <div class="col-md-7">
+        <div class="filter-pills d-flex flex-wrap gap-2">
+          <button type="button" class="pill" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">
+            الكل
+          </button>
+          <button type="button" class="pill" [class.active]="activeFilter === 'history'" (click)="setFilter('history')">
+            تاريخ
+          </button>
+          <button type="button" class="pill" [class.active]="activeFilter === 'geography'" (click)="setFilter('geography')">
+            جغرافيا
+          </button>
+          <button type="button" class="pill" [class.active]="activeFilter === 'review'" (click)="setFilter('review')">
+            مراجعات
+          </button>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="search-box position-relative"><svg class="s-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="ابحث عن كورس..."
+            [ngModel]="searchTerm"
+            (ngModelChange)="onSearchChange($event)"
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= Courses grid ========================= -->
+<section class="courses-grid-section">
+  <div class="container">
+
+    <p class="result-count" *ngIf="filteredCourses.length > 0">
+      <span class="star"></span> {{ filteredCourses.length }} كورس متاح
+    </p>
+
+    <div class="row g-4" *ngIf="filteredCourses.length > 0; else noResults">
+      <div class="col-md-4 card-in" *ngFor="let course of pagedCourses; let i = index" [style.--d]="(i % 3) * 110 + 'ms'">
+        <app-course-card class="spot" [course]="course"></app-course-card>
+      </div>
+    </div>
+
+    <ng-template #noResults>
+      <div class="row g-4" *ngIf="loading()">
+        <div class="col-md-4" *ngFor="let s of [1,2,3]"><div class="skeleton"></div></div>
+      </div>
+      <div class="empty-state text-center py-5" *ngIf="!loading()">
+        <span class="empty-star" aria-hidden="true"></span>
+        <p class="empty-title">{{ loading() ? 'جاري تحميل الكورسات...' : (courses().length === 0 ? 'مفيش كورسات متاحة دلوقتي' : 'مفيش كورسات مطابقة للبحث') }}</p>
+        <p class="empty-sub" *ngIf="!loading() && courses().length > 0">جرّب تغيّر كلمة البحث أو اختار فلتر تاني</p>
+      </div>
+    </ng-template>
+
+    <!-- ========================= Pagination ========================= -->
+    <nav aria-label="pagination" class="mt-5" *ngIf="totalPages > 1">
+      <ul class="pagination justify-content-center flex-wrap">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <button type="button" class="page-link" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">السابق</button>
+        </li>
+        <li class="page-item" *ngFor="let p of pages" [class.active]="p === currentPage">
+          <button type="button" class="page-link" (click)="goToPage(p)" [attr.aria-current]="p === currentPage ? 'page' : null">{{ p }}</button>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <button type="button" class="page-link" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">التالي</button>
+        </li>
+      </ul>
+    </nav>
+
+  </div>
+</section>

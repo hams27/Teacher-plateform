@@ -1,0 +1,38 @@
+<app-site-nav></app-site-nav>
+
+<section class="page-hero text-center">
+  <div class="hero-deco" aria-hidden="true">
+    <span class="glow"></span><span class="big-star"></span>
+    <i class="h h1">♥</i><i class="h h2">♥</i><i class="h h3">♥</i><i class="h h4">♥</i><i class="h h5">♥</i>
+  </div>
+  <div class="container">
+    <div class="heart-badge in-up" style="--d:.05s" aria-hidden="true"><span class="star"></span><b>♥</b></div>
+    <h1 class="page-title"><span class="ln"><span class="w" style="--d:.15s">كورساتي</span> <span class="w shimmer" style="--d:.25s">المفضلة</span></span></h1>
+    <p class="page-sub mx-auto in-up" style="--d:.45s">الكورسات اللي ضفتها لمفضلتك، ومحدّش غيرك بيشوفها</p>
+  </div>
+</section>
+
+<section class="grid-section">
+  <div class="container">
+    <p class="result-count" *ngIf="list().length > 0"><span class="star"></span> {{ list().length }} في مفضلتك</p>
+
+    <div class="row g-4" *ngIf="list().length > 0; else empty">
+      <div class="col-md-4 card-in" *ngFor="let c of list(); let i = index" [style.--d]="(i % 3) * 110 + 'ms'">
+        <app-course-card class="spot" [course]="c"></app-course-card>
+      </div>
+    </div>
+
+    <ng-template #empty>
+      <div class="row g-4" *ngIf="loading()">
+        <span class="visually-hidden">جاري التحميل...</span>
+        <div class="col-md-4" *ngFor="let s of [1,2,3]"><div class="skeleton"></div></div>
+      </div>
+      <div class="empty-state text-center py-5" *ngIf="!loading()">
+        <div class="empty-heart" aria-hidden="true"><span class="ring"></span><b>♡</b></div>
+        <p class="empty-title">لسه مضفتيش كورسات للمفضلة</p>
+        <p class="empty-sub">دوسي على القلب في أي كورس عشان تلاقيه هنا بسرعة</p>
+        <a routerLink="/courses" class="btn btn-brass shine px-4 py-3 mt-3">تصفح الكورسات</a>
+      </div>
+    </ng-template>
+  </div>
+</section>

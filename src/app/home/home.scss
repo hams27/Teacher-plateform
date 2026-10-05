@@ -1,0 +1,319 @@
+// ============ متغيرات الهوية البصرية (العثماني النحاسي) ============
+$bg: #0e332b;
+$bg-alt: #123d33;
+$card-bg: #153f34;
+$brass: #b87333;
+$brass-light: #cf9a5c;
+$gold: #f2d9a8;
+$cream: #f2e6cd;
+$cream-dim: #c9bfa6;
+$muted: #8fa89c;
+$border: rgba(184, 115, 51, 0.35);
+$ease: cubic-bezier(.2, .8, .2, 1);
+
+// نمط نجمة ثمانية هندسية (زخرفة إسلامية)
+$tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cg fill='none' stroke='%23b87333' stroke-opacity='.55'%3E%3Crect x='20' y='20' width='40' height='40'/%3E%3Cpolygon points='40,12 68,40 40,68 12,40'/%3E%3C/g%3E%3C/svg%3E");
+$bigstar: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='%23cf9a5c' stroke-width='.6'%3E%3Crect x='45' y='45' width='110' height='110'/%3E%3Crect x='45' y='45' width='110' height='110' transform='rotate(45 100 100)'/%3E%3Ccircle cx='100' cy='100' r='78'/%3E%3Ccircle cx='100' cy='100' r='96'/%3E%3C/g%3E%3C/svg%3E");
+
+:host {
+  display: block;
+  background: $bg;
+  color: $cream;
+  font-family: 'HT Moshreq Pro', sans-serif;
+  line-height: 1.8;
+  overflow-x: clip; // clip بدل hidden عشان الهيدر يفضل sticky
+}
+a { color: inherit; text-decoration: none; }
+section { padding: 100px 0; scroll-margin-top: 70px; }
+
+// ============ حركات عامة ============
+@keyframes rise   { from { opacity: 0; transform: translateY(28px); } }
+@keyframes word   { from { transform: translateY(115%); } }
+@keyframes spin   { to { transform: rotate(360deg); } }
+@keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+@keyframes pulse  { 0% { box-shadow: 0 0 0 0 rgba(207,154,92,.6); } 100% { box-shadow: 0 0 0 12px rgba(207,154,92,0); } }
+@keyframes sweep  { 0%,55% { transform: translateX(-130%); } 100% { transform: translateX(130%); } }
+@keyframes sheen  { to { background-position: -200% 0; } }
+@keyframes marq   { to { transform: translateX(-50%); } }
+@keyframes swing  { 0%,100% { transform: rotate(-28deg); } 50% { transform: rotate(34deg); } }
+@keyframes rain   { 0% { transform: translateY(40px); opacity: 0; } 20%,80% { opacity: .8; } 100% { transform: translateY(-140px); opacity: 0; } }
+@keyframes pop    { from { opacity: 0; transform: translateY(16px) scale(.97); } }
+
+// ظهور العناصر عند السكرول (الكلاس anim بيتضاف من TS)
+.anim .rv { opacity: 0; transform: translateY(36px); transition: opacity .9s ease, transform .9s $ease; }
+.anim .rv.in { opacity: 1; transform: none; transition-delay: var(--d, 0s); }
+.hero-in { animation: rise .9s $ease var(--d, 0s) both; }
+
+// ============ شريط التقدم + زر الأعلى ============
+.read-progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 2000;
+  background: linear-gradient(90deg, $brass, $gold); transform-origin: 100% 50%;
+  transform: scaleX(var(--sp, 0)); pointer-events: none;
+}
+.to-top {
+  position: fixed; bottom: 26px; left: 26px; z-index: 1900; width: 46px; height: 46px; border-radius: 50%;
+  background: $brass; color: $bg; border: 0; font-size: 20px; line-height: 1;
+  opacity: 0; transform: translateY(20px); pointer-events: none; transition: all .35s $ease;
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+  &:hover { background: $brass-light; transform: translateY(-3px) !important; }
+}
+:host(.show-top) .to-top { opacity: 1; transform: none; pointer-events: auto; }
+
+// ============ فاصل هندسي ============
+.divider {
+  display: flex; align-items: center; justify-content: center; gap: 14px; color: $brass;
+  .line { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, $brass-light, transparent); transform: scaleX(0); transition: transform 1s $ease .2s; }
+}
+.in .divider .line, .divider.in .line { transform: scaleX(1); }
+:host:not(.anim) .divider .line { transform: none; }
+.star {
+  width: 14px; height: 14px; background: $brass; flex-shrink: 0;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+.divider .star { animation: spin 8s linear infinite; }
+
+// ============ الأزرار ============
+.btn-brass, .btn-outline-brass { position: relative; overflow: hidden; transition: all .3s $ease; }
+.btn-brass {
+  background: $brass; color: $bg; border-radius: 2px; font-weight: 500;
+  &:hover { background: $brass-light; color: $bg; transform: translateY(-3px); box-shadow: 0 10px 28px rgba(184,115,51,.4); }
+  &:active { transform: translateY(0); }
+}
+.btn-outline-brass {
+  border: 1px solid $brass; color: $brass-light; border-radius: 2px;
+  &:hover { background: $brass; color: $bg; transform: translateY(-3px); box-shadow: 0 10px 28px rgba(184,115,51,.25); }
+}
+.shine::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.4) 50%, transparent 70%);
+  animation: sweep 3.8s ease-in-out infinite;
+}
+
+// ============ الهيدر ============
+.site-header {
+  background: rgba(14, 51, 43, 0.82); backdrop-filter: blur(12px) saturate(1.3);
+  border-bottom: 1px solid $border; transition: box-shadow .4s, background .4s; z-index: 1500;
+}
+:host(.scrolled) .site-header { background: rgba(10, 38, 32, .94); box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+.logo { font-family: 'HT Rakeez', sans-serif; font-size: 19px; font-weight: 600; color: $brass-light; }
+.logo-sub { font-family: 'HT Moshreq Pro', sans-serif; font-size: 11px; color: $muted; letter-spacing: 3px; }
+.navbar-nav .nav-link {
+  color: $cream-dim; position: relative; transition: color .3s;
+  &::after { content: ''; position: absolute; bottom: 2px; right: 8px; left: 8px; height: 1px; background: $brass-light; transform: scaleX(0); transform-origin: 100% 50%; transition: transform .4s $ease; }
+  &:hover { color: $brass-light; &::after { transform: scaleX(1); } }
+}
+
+// ============ الهيرو ============
+.hero { position: relative; padding: 90px 0 100px; overflow: hidden; }
+.hero-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  &::before {
+    content: ''; position: absolute; inset: -80px; background: $tile; opacity: .1; animation: drift 40s linear infinite;
+    -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, #000, transparent 75%); mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, #000, transparent 75%);
+  }
+  .glow { position: absolute; inset: 0; background: radial-gradient(520px circle at var(--hx, 30%) var(--hy, 30%), rgba(207,154,92,.13), transparent 60%); }
+  .orb { position: absolute; border-radius: 50%; filter: blur(70px); animation: floaty 9s ease-in-out infinite; }
+  .o1 { width: 380px; height: 380px; background: rgba(184,115,51,.2); top: -80px; right: -60px; }
+  .o2 { width: 320px; height: 320px; background: rgba(40,130,100,.22); bottom: -80px; left: -40px; animation-delay: -4s; }
+  .p { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: $brass-light; bottom: 20%; animation: rain 7s linear infinite; }
+  .p1 { right: 12%; } .p2 { right: 28%; animation-delay: -2s; } .p3 { right: 46%; animation-delay: -4s; }
+  .p4 { right: 62%; animation-delay: -1s; } .p5 { right: 78%; animation-delay: -5s; } .p6 { right: 90%; animation-delay: -3s; }
+}
+@keyframes drift { to { transform: translate(80px, 80px); } }
+
+.hero-grid { position: relative; display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: center; }
+.hero-copy { text-align: start; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 12px; font-family: 'HT Rakeez', sans-serif; font-size: 13px;
+  letter-spacing: 4px; color: $brass-light; margin-bottom: 24px;
+  .pulse { width: 8px; height: 8px; border-radius: 50%; background: $brass-light; animation: pulse 1.8s ease-out infinite; }
+}
+.hero-title {
+  font-family: 'HT Rakeez', sans-serif; font-weight: 700; font-size: 50px; line-height: 1.6; color: $cream; margin-bottom: 22px;
+  .ln { display: block; overflow: hidden; padding: .1em 0; }
+  .w { display: inline-block; animation: word 1s $ease var(--d, 0s) both; }
+  em { font-style: normal; }
+  .shimmer {
+    background: linear-gradient(100deg, $brass 20%, $gold 45%, $brass-light 55%, $brass 80%); background-size: 200% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: word 1s $ease var(--d, 0s) both, sheen 4s linear 1.8s infinite;
+  }
+}
+.hero-text { font-size: 17.5px; color: $cream-dim; max-width: 520px; margin-bottom: 34px; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 44px; }
+.hero-stats {
+  display: grid; grid-template-columns: repeat(3, auto); justify-content: start; border-top: 1px solid $border; padding-top: 24px;
+  .stat { padding-inline-end: 40px; margin-inline-end: 40px; border-inline-end: 1px solid $border; &:last-child { border: 0; margin: 0; padding: 0; } }
+}
+.stat-num { font-family: 'HT Rakeez', sans-serif; font-size: 30px; color: $brass-light; font-weight: 600; line-height: 1.3; }
+.stat-label { font-size: 13px; color: $muted; margin-top: 4px; }
+
+// الأسطرلاب
+.art-wrap { position: relative; width: min(100%, 470px); margin-inline: auto; transform: translate(calc(var(--px, 0) * 14px), calc(var(--py, 0) * 10px)); transition: transform .3s ease-out; }
+.astro { width: 100%; height: auto; display: block; filter: drop-shadow(0 20px 60px rgba(184,115,51,.25)); }
+.astro {
+  .ring { fill: none; stroke: $brass; stroke-width: 1.2; opacity: .85; &.dash { stroke-dasharray: 3 9; } &.ticks { stroke-width: 14; stroke-dasharray: 1.5 11; opacity: .55; } &.solid { stroke: $brass-light; stroke-width: 1.6; } &.thin { stroke-width: .8; opacity: .55; } }
+  .jewel { fill: $gold; filter: drop-shadow(0 0 8px $brass-light); }
+  .hub { fill: $brass-light; }
+  .n-up { fill: $brass-light; } .n-dn { fill: #6b4120; }
+  g { transform-box: view-box; transform-origin: 50% 50%; }
+  .spin-slow { animation: spin 50s linear infinite; }
+  .spin-rev { animation: spin 70s linear infinite reverse; }
+  .spin-mid { animation: spin 90s linear infinite; }
+  .globe { animation: spin 140s linear infinite reverse; }
+  .needle { animation: swing 7s ease-in-out infinite; }
+}
+.chip {
+  position: absolute; padding: 8px 16px; font-size: 13px; color: $cream; background: rgba(21,63,52,.85); backdrop-filter: blur(8px);
+  border: 1px solid $border; border-radius: 40px; box-shadow: 0 10px 30px rgba(0,0,0,.3); animation: floaty 6s ease-in-out infinite;
+  &.c1 { top: 10%; right: -4%; } &.c2 { top: 52%; left: -8%; animation-delay: -2s; } &.c3 { bottom: 6%; right: 6%; animation-delay: -4s; }
+}
+
+// شريط المحاور
+.marquee {
+  direction: ltr; overflow: hidden; padding: 18px 0; background: rgba(0,0,0,.16); border-block: 1px solid $border;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  .track { display: flex; align-items: center; width: max-content; animation: marq 45s linear infinite; &:hover { animation-play-state: paused; } }
+  .track > * { margin-right: 30px; flex-shrink: 0; }
+  span { direction: rtl; white-space: nowrap; font-family: 'HT Rakeez', sans-serif; font-size: 15px; color: $cream-dim; }
+  .star { width: 10px; height: 10px; }
+}
+
+// ============ الأقسام العامة ============
+.section-alt { background: $bg-alt; }
+.section-head { max-width: 600px; }
+.section-title { font-family: 'HT Rakeez', sans-serif; font-size: 32px; font-weight: 600; color: $cream; margin-bottom: 14px; }
+.section-title-lg { font-family: 'HT Rakeez', sans-serif; font-size: 29px; color: $cream; margin-bottom: 18px; line-height: 1.6; }
+.section-sub { color: $cream-dim; font-size: 15.5px; }
+
+// ============ عن المدرس ============
+.photo-stage { position: relative; transition: transform .3s ease-out; transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); }
+.frame { position: absolute; inset: 0; border: 1px solid $brass; border-radius: 4px; transform: translate(-18px, 18px); transition: transform .6s $ease; }
+.photo-stage:hover .frame { transform: translate(-26px, 26px); }
+.bg-star { position: absolute; inset: -40px; background: $bigstar center/contain no-repeat; opacity: .35; animation: spin 80s linear infinite; }
+.about-photo {
+  position: relative; aspect-ratio: 4 / 5; background: linear-gradient(160deg, #1a4a3d, #0c2a22); border: 1px solid $border; border-radius: 4px; color: $muted; font-size: 13px; overflow: hidden;
+  img { max-width: 100%; max-height: 100%; object-fit: contain; animation: floaty 7s ease-in-out infinite; }
+}
+.exp-badge {
+  position: absolute; bottom: -22px; right: -20px; width: 108px; height: 108px; border-radius: 50%; background: linear-gradient(135deg, $brass-light, $brass); color: $bg;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2; box-shadow: 0 14px 34px rgba(0,0,0,.4); animation: floaty 5s ease-in-out infinite;
+  b { font-family: 'HT Rakeez', sans-serif; font-size: 28px; } span { font-size: 12px; }
+}
+.about-desc { color: $cream-dim; font-size: 15.5px; margin-bottom: 26px; }
+.credentials li {
+  display: flex; align-items: center; gap: 14px; font-size: 14.5px; color: $cream-dim; margin-bottom: 14px; padding: 12px 16px; border: 1px solid transparent; border-radius: 3px; transition: all .35s $ease;
+  .dot { width: 8px; height: 8px; background: $brass; transform: rotate(45deg); flex-shrink: 0; transition: transform .5s $ease; }
+  &:hover { border-color: $border; background: rgba(184,115,51,.07); transform: translateX(-8px); color: $cream; .dot { transform: rotate(225deg) scale(1.4); } }
+}
+
+// ============ كروت الكورسات (داخل الهوم فقط) ============
+app-course-card { display: block; height: 100%; transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .3s ease-out; }
+app-course-card ::ng-deep {
+  .course-card { position: relative; transition: border-color .4s, box-shadow .4s; &:hover { transform: none; border-color: $brass; box-shadow: 0 24px 50px rgba(0,0,0,.4), 0 0 0 1px rgba(207,154,92,.25); }
+    &::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .35s; background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgba(207,154,92,.17), transparent 60%); }
+    &:hover::after { opacity: 1; } }
+  .card-thumb { overflow: hidden; &::after { content: ''; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 38%, rgba(207,154,92,.18) 50%, transparent 62%); transform: translateX(-110%); transition: transform 1s $ease; } }
+  .course-card:hover .card-thumb::after { transform: translateX(110%); }
+  .card-title-brass { transition: color .3s; }
+  .course-card:hover .card-title-brass { color: $gold; }
+  .card-link { transition: letter-spacing .3s, color .3s; }
+  .course-card:hover .card-link { color: $brass-light; letter-spacing: .5px; }
+}
+.skeleton {
+  height: 330px; border: 1px solid $border; border-radius: 4px;
+  background: linear-gradient(100deg, $card-bg 30%, #1d4f42 50%, $card-bg 70%); background-size: 200% 100%; animation: sheen 1.6s linear infinite;
+}
+
+// ============ الرحلة ============
+.steps { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; max-width: 980px; margin: 0 auto;
+  &::before { content: ''; position: absolute; top: 23px; right: 16%; left: 16%; border-top: 1px dashed $brass; opacity: .6; }
+}
+.step {
+  position: relative; text-align: center; padding: 0 12px;
+  .n { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 50%; background: $bg-alt; border: 1px solid $brass; color: $brass-light;
+    font-family: 'HT Rakeez', sans-serif; font-size: 18px; margin-bottom: 18px; position: relative; animation: pulse 2.6s ease-out infinite; transition: all .4s $ease; }
+  &:nth-child(2) .n { animation-delay: .6s; } &:nth-child(3) .n { animation-delay: 1.2s; }
+  &:hover .n { background: $brass; color: $bg; transform: scale(1.15) rotate(12deg); }
+  h3 { font-family: 'HT Rakeez', sans-serif; font-size: 20px; color: $cream; margin-bottom: 8px; }
+  p { font-size: 14.5px; color: $muted; max-width: 270px; margin: 0 auto; }
+}
+
+// ============ المقالات ============
+.article-row {
+  position: relative; padding: 28px 12px; border-bottom: 1px solid $border; overflow: hidden;
+  &:first-child { border-top: 1px solid $border; }
+  &::before { content: ''; position: absolute; inset: 0; background: linear-gradient(270deg, rgba(184,115,51,.14), transparent); transform: scaleX(0); transform-origin: 100% 50%; transition: transform .6s $ease; }
+  &:hover::before { transform: scaleX(1); }
+  > * { position: relative; }
+  .article-title { transition: transform .45s $ease, color .3s; }
+  .article-arrow { transition: transform .45s $ease; }
+  &:hover .article-title { transform: translateX(-10px); color: $gold; }
+  &:hover .article-arrow { transform: translateX(-12px); }
+}
+.article-meta { display: flex; gap: 10px; align-items: center; font-size: 12.5px; color: $muted; margin-bottom: 8px;
+  .cat { color: $brass-light; border: 1px solid $border; border-radius: 20px; padding: 0 12px; }
+}
+.article-title { font-family: 'HT Rakeez', sans-serif; font-weight: 500; font-size: 19px; color: $cream; margin: 0; }
+.article-arrow { color: $brass; font-size: 22px; margin-right: 24px; }
+
+// ============ آراء الطلاب ============
+.testi-card {
+  position: relative; overflow: hidden; background: $card-bg; border: 1px solid $border; border-radius: 4px; padding: 34px 28px 28px; transition: transform .4s $ease, border-color .4s, box-shadow .4s;
+  &::before { content: ''; position: absolute; top: 0; right: 0; left: 0; height: 2px; background: linear-gradient(90deg, transparent, $brass-light, transparent); transform: scaleX(0); transition: transform .6s $ease; }
+  &:hover { transform: translateY(-8px); border-color: $brass; box-shadow: 0 22px 44px rgba(0,0,0,.35); &::before { transform: scaleX(1); } }
+}
+.qmark { position: absolute; top: -6px; left: 18px; font-family: 'HT Rakeez', serif; font-size: 100px; line-height: 1; color: $brass; opacity: .2; pointer-events: none; }
+.testi-text { position: relative; font-size: 16px; color: $cream-dim; margin-bottom: 22px; line-height: 1.95; }
+.testi-who { display: flex; align-items: center; gap: 12px; margin-top: auto; }
+.avatar { width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, $brass-light, $brass); color: $bg; font-family: 'HT Rakeez', sans-serif; font-size: 18px; text-transform: uppercase; }
+.testi-name { font-size: 14px; color: $brass-light; font-weight: 500; margin: 0; }
+.testi-role { font-size: 12.5px; color: $muted; margin: 0; }
+
+// ============ شريط الدعوة لإجراء ============
+.cta-band { position: relative; overflow: hidden; background: $bg; border-top: 1px solid $border; border-bottom: 1px solid $border; padding: 110px 0; }
+.cta-star { position: absolute; top: 50%; left: 50%; width: 620px; height: 620px; margin: -310px 0 0 -310px; background: $bigstar center/contain no-repeat; opacity: .22; animation: spin 90s linear infinite; pointer-events: none; }
+.cta-band .container { position: relative; }
+.cta-band .section-title { font-size: 34px; }
+
+// ============ الفوتر ============
+footer { padding: 70px 0 30px; background: linear-gradient(180deg, $bg, #0a2620); }
+.footer-desc { color: $muted; font-size: 14px; max-width: 280px; }
+.footer-heading { font-family: 'HT Rakeez', sans-serif; font-size: 14px; color: $brass-light; margin-bottom: 18px; letter-spacing: 1px; }
+footer a { display: block; width: fit-content; color: $cream-dim; font-size: 14px; margin-bottom: 12px; transition: color .3s, transform .3s $ease; &:hover { color: $brass-light; transform: translateX(-6px); } }
+.footer-bottom { padding-top: 26px; margin-top: 30px; border-top: 1px solid $border; font-size: 13px; color: $muted; }
+
+// ============ إضافة رأي ============
+.opinion-form {
+  max-width: 560px; background: $card-bg; border: 1px solid $border; border-radius: 4px; padding: 24px; animation: pop .5s $ease both;
+  .form-label { color: $cream-dim; font-size: 14px; }
+  .form-control { background: $bg; border: 1px solid $border; color: $cream; border-radius: 4px; font-family: inherit; transition: all .3s;
+    &:focus { background: $bg; color: $cream; border-color: $brass; box-shadow: 0 0 0 3px rgba(184,115,51,.15); } }
+}
+.counter { color: $muted; font-size: 12px; }
+.opinion-msg { color: #7fcf9a; font-size: 14px; margin: 14px 0 0; animation: pop .4s $ease both; &.err { color: #e07856; } }
+
+// ============ الشاشات الصغيرة ============
+@media (max-width: 991px) {
+  .hero { padding: 60px 0 70px; }
+  .hero-grid { grid-template-columns: 1fr; text-align: center; }
+  .hero-copy { text-align: center; }
+  .hero-text { margin-inline: auto; }
+  .hero-cta, .hero-stats { justify-content: center; }
+  .hero-art { order: -1; .art-wrap { width: min(78%, 340px); } }
+  .chip { display: none; }
+}
+@media (max-width: 860px) {
+  section { padding: 70px 0; }
+  .hero-title { font-size: 33px; }
+  .steps { grid-template-columns: 1fr; gap: 36px; &::before { display: none; } }
+  .exp-badge { right: 8px; width: 90px; height: 90px; b { font-size: 22px; } }
+  .frame { transform: translate(-10px, 10px); }
+  .hero-stats .stat { padding-inline-end: 22px; margin-inline-end: 22px; }
+  .stat-num { font-size: 24px; }
+}
+
+// ============ احترام تفضيل تقليل الحركة ============
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

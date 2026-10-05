@@ -1,0 +1,36 @@
+<section class="login-section d-flex align-items-center justify-content-center">
+  <div class="login-box">
+    <p class="eyebrow text-center">لوحة تحكم المدرس</p>
+    <h1 class="login-title text-center">تسجيل الدخول</h1>
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label class="form-label">البريد الإلكتروني</label>
+        <input
+          type="email"
+          class="form-control"
+          [(ngModel)]="email"
+          name="email"
+          required
+        >
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">كلمة المرور</label>
+        <input
+          type="password"
+          class="form-control"
+          [(ngModel)]="password"
+          name="password"
+          required
+        >
+      </div>
+
+      <p class="error-text" *ngIf="errorMessage()">{{ errorMessage() }}</p>
+
+      <button type="submit" class="btn btn-brass w-100 py-3 mt-2" [disabled]="loading()">
+        {{ loading() ? 'جاري الدخول...' : 'دخول' }}
+      </button>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,19 @@
+$bg: #0e332b;
+$card-bg: #153f34;
+$brass: #b87333;
+$brass-light: #cf9a5c;
+$cream: #f2e6cd;
+$cream-dim: #c9bfa6;
+$muted: #8fa89c;
+$border: rgba(184, 115, 51, 0.35);
+
+:host { display: block; font-family: 'HT Moshreq Pro', sans-serif; }
+a { text-decoration: none; }
+.site-header {
+  background: rgba(14, 51, 43, 0.95);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid $border;
+}
+.logo { font-family: 'HT Rakeez', sans-serif; font-size: 19px; font-weight: 600; color: $brass-light; }
+.logo-sub { font-family: 'HT Moshreq Pro', sans-serif; font-size: 11px; color: $muted; letter-spacing: 3px; }
+.nav-link-x { color: $cream-dim; font-size: 14.5px; &:hover { color: $brass-light; } }

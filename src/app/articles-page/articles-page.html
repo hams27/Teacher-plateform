@@ -1,0 +1,64 @@
+<app-site-nav></app-site-nav>
+
+<!-- ========================= Page header ========================= -->
+<section class="page-hero text-center">
+  <div class="hero-deco" aria-hidden="true"><span class="glow"></span><span class="big-star"></span><i class="p p1"></i><i class="p p2"></i><i class="p p3"></i><i class="p p4"></i></div>
+  <div class="container">
+    <nav aria-label="breadcrumb" class="in-up" style="--d:.05s">
+      <ol class="breadcrumb justify-content-center">
+        <li class="breadcrumb-item"><a routerLink="/">الرئيسية</a></li>
+        <li class="breadcrumb-item active" aria-current="page">المقالات</li>
+      </ol>
+    </nav>
+    <h1 class="page-title"><span class="ln"><span class="w shimmer" style="--d:.15s">المقالات</span></span></h1>
+    <p class="page-sub mx-auto in-up" style="--d:.35s">مقالات وملخصات مجانية لتثبيت المعلومة</p>
+  </div>
+</section>
+
+<!-- ========================= Category filter ========================= -->
+<section class="filters-section" *ngIf="categories().length > 1">
+  <div class="container in-up" style="--d:.5s">
+    <div class="filter-pills d-flex flex-wrap justify-content-center gap-2">
+      <button type="button" class="pill" [class.active]="current() === 'all'" (click)="setCategory('all')">الكل</button>
+      <button type="button" class="pill" *ngFor="let c of categories()" [class.active]="current() === c" (click)="setCategory(c)">{{ c }}</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= Articles list ========================= -->
+<section class="list-section">
+  <div class="container">
+    <div class="article-list" *ngIf="filtered().length > 0; else empty">
+      <p class="result-count"><span class="star"></span> {{ filtered().length }} {{ filtered().length === 1 ? 'مقالة' : 'مقالات' }}</p>
+
+      <a class="article-row card-in" *ngFor="let a of filtered(); let i = index; trackBy: trackById"
+         [style.--d]="(i % 8) * 70 + 'ms'" [routerLink]="['/articles', a.id]">
+        <span class="mark" aria-hidden="true"></span>
+        <div class="row-body">
+          <p class="article-meta">
+            <span class="cat" *ngIf="a.category">{{ a.category }}</span>
+            <span *ngIf="dateOf(a)">{{ dateOf(a) }}</span>
+            <span>{{ readTime(a) }}</span>
+          </p>
+          <h2 class="article-title">{{ a.title }}</h2>
+          <p class="article-excerpt" *ngIf="excerpt(a)">{{ excerpt(a) }}</p>
+        </div>
+        <span class="article-arrow" aria-hidden="true">←</span>
+      </a>
+    </div>
+
+    <ng-template #empty>
+      <div class="article-list" *ngIf="loading()">
+        <span class="visually-hidden">جاري التحميل...</span>
+        <div class="sk-row" *ngFor="let s of [1,2,3,4]">
+          <i class="sk a"></i><i class="sk b"></i><i class="sk c"></i>
+        </div>
+      </div>
+      <div class="empty-state text-center py-5" *ngIf="!loading()">
+        <span class="empty-star" aria-hidden="true"></span>
+        <p class="empty-title">مفيش مقالات منشورة لسه</p>
+        <p class="empty-sub">أول ما تتنشر مقالة جديدة هتلاقيها هنا</p>
+      </div>
+    </ng-template>
+  </div>
+</section>

@@ -1,0 +1,25 @@
+$bg: #0e332b;
+$card-bg: #153f34;
+$brass: #b87333;
+$brass-light: #cf9a5c;
+$cream: #f2e6cd;
+$cream-dim: #c9bfa6;
+$muted: #8fa89c;
+$border: rgba(184, 115, 51, 0.35);
+
+:host { display: inline-block; font-family: 'HT Moshreq Pro', sans-serif; }
+a { text-decoration: none; }
+.nu-link { color: $cream-dim; font-size: 14px; &:hover { color: $brass-light; } }
+.nu-name {
+  color: $cream; font-size: 14px; max-width: 140px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.nu-btn {
+  background: transparent; border: 1px solid $border; color: $brass-light;
+  border-radius: 2px; padding: 4px 14px; font-size: 13px; font-family: inherit;
+  &:hover { background: $brass; color: $bg; }
+}
+.nu-cta {
+  background: $brass; color: $bg; border-radius: 2px; padding: 7px 18px; font-size: 14px; font-weight: 500;
+  &:hover { background: $brass-light; color: $bg; }
+}

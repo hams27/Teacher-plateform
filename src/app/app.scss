@@ -1,0 +1,148 @@
+// ============ متغيرات الهوية البصرية (العثماني النحاسي) ============
+$bg: #0e332b;
+$bg-alt: #123d33;
+$card-bg: #153f34;
+$brass: #b87333;
+$brass-light: #cf9a5c;
+$cream: #f2e6cd;
+$cream-dim: #c9bfa6;
+$muted: #8fa89c;
+$border: rgba(184, 115, 51, 0.35);
+
+:host {
+  display: block;
+  background: $bg;
+  color: $cream;
+  font-family: 'HT Moshreq Pro', sans-serif;
+  line-height: 1.8;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+
+// ============ فاصل هندسي ============
+.divider {
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  color: $brass;
+  .line { width: 60px; height: 1px; background: $border; }
+}
+.star {
+  width: 14px; height: 14px; background: $brass;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+// ============ الأزرار ============
+.btn-brass {
+  background: $brass; color: $bg; border-radius: 2px; font-weight: 500;
+  &:hover { background: $brass-light; color: $bg; }
+}
+.btn-outline-brass {
+  border: 1px solid $brass; color: $brass-light; border-radius: 2px;
+  &:hover { background: $brass; color: $bg; }
+}
+
+// ============ الهيدر ============
+.site-header {
+  background: rgba(14, 51, 43, 0.92);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid $border;
+}
+.logo {
+  font-family: 'HT Rakeez', sans-serif;
+  font-size: 19px; font-weight: 600; color: $brass-light;
+}
+.logo-sub { font-family: 'HT Moshreq Pro', sans-serif; font-size: 11px; color: $muted; letter-spacing: 3px; }
+.navbar-nav .nav-link { color: $cream-dim; &:hover { color: $brass-light; } }
+
+// ============ الهيرو ============
+.hero {
+  position: relative;
+  padding: 120px 0 100px;
+  background:
+    radial-gradient(ellipse 700px 400px at 20% 10%, rgba(184, 115, 51, .08), transparent 60%),
+    radial-gradient(ellipse 700px 400px at 85% 90%, rgba(184, 115, 51, .07), transparent 60%);
+}
+.hero-inner { max-width: 760px; margin: 0 auto; }
+.eyebrow { font-family: 'HT Rakeez', sans-serif; font-size: 13px; letter-spacing: 5px; color: $brass-light; margin-bottom: 24px; }
+.hero-title {
+  font-family: 'HT Rakeez', sans-serif; font-weight: 700; font-size: 46px; line-height: 1.7;
+  color: $cream; margin-bottom: 22px;
+  em { font-style: normal; color: $brass-light; }
+}
+.hero-text { font-size: 17px; color: $cream-dim; max-width: 520px; margin-bottom: 38px; }
+.hero-stats { border-top: 1px solid $border; max-width: 600px; }
+.stat-num { font-family: 'HT Rakeez', sans-serif; font-size: 26px; color: $brass-light; font-weight: 600; }
+.stat-label { font-size: 13px; color: $muted; margin-top: 4px; }
+
+// ============ الأقسام العامة ============
+section { padding: 90px 0; }
+.section-alt { background: $bg-alt; }
+.section-head { max-width: 600px; }
+.section-title { font-family: 'HT Rakeez', sans-serif; font-size: 30px; font-weight: 600; color: $cream; margin-bottom: 14px; }
+.section-title-lg { font-family: 'HT Rakeez', sans-serif; font-size: 27px; color: $cream; margin-bottom: 18px; line-height: 1.6; }
+.section-sub { color: $cream-dim; font-size: 15.5px; }
+
+// ============ قسم عن المدرس ============
+.about-photo {
+  aspect-ratio: 4 / 5;
+  background: linear-gradient(160deg, #1a4a3d, #0c2a22);
+  border: 1px solid $border;
+  border-radius: 4px;
+  color: $muted; font-size: 13px;
+}
+.about-desc { color: $cream-dim; font-size: 15.5px; margin-bottom: 26px; }
+.credentials li {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 14.5px; color: $cream-dim; margin-bottom: 14px;
+  .dot { width: 6px; height: 6px; background: $brass; border-radius: 50%; flex-shrink: 0; }
+}
+
+// ============ كروت الكورسات ============
+.course-card {
+  background: $card-bg; border: 1px solid $border; border-radius: 4px; overflow: hidden;
+  transition: transform .2s, border-color .2s;
+  &:hover { transform: translateY(-4px); border-color: $brass; }
+}
+.card-thumb {
+  height: 150px; background: linear-gradient(135deg, #1a4a3d, #0e332b);
+  color: $brass; font-size: 28px; border-bottom: 1px solid $border;
+}
+.card-tag { font-size: 12px; color: $brass-light; letter-spacing: 2px; margin-bottom: 10px; }
+.card-title-brass { font-family: 'HT Rakeez', sans-serif; font-size: 18px; color: $cream; margin-bottom: 10px; line-height: 1.6; }
+.card-desc { font-size: 14px; color: $muted; margin-bottom: 18px; }
+.card-foot { padding-top: 16px; border-top: 1px solid $border; }
+.price { font-family: 'HT Rakeez', sans-serif; color: $brass-light; font-size: 15px; }
+.card-link { font-size: 13px; color: $cream-dim; }
+
+// ============ قائمة المقالات ============
+.article-row {
+  padding: 26px 0; border-bottom: 1px solid $border; transition: padding-right .2s;
+  &:hover { padding-right: 12px; }
+  &:first-child { border-top: 1px solid $border; }
+}
+.article-meta { font-size: 12.5px; color: $brass-light; letter-spacing: 1px; margin-bottom: 8px; }
+.article-title { font-family: 'HT Rakeez', sans-serif; font-weight: 500; font-size: 18px; color: $cream; }
+.article-arrow { color: $brass; font-size: 20px; margin-right: 24px; }
+
+// ============ آراء الطلاب ============
+.testi-card {
+  background: $card-bg; border: 1px solid $border; border-radius: 4px; padding: 30px 26px;
+}
+.testi-text { font-family: 'HT Moshreq Pro', sans-serif; font-style: italic; font-size: 16px; color: $cream-dim; margin-bottom: 20px; line-height: 1.9; }
+.testi-name { font-size: 14px; color: $brass-light; font-weight: 500; margin-bottom: 2px; }
+.testi-role { font-size: 12.5px; color: $muted; }
+
+// ============ شريط الدعوة لإجراء ============
+.cta-band { background: $bg-alt; border-top: 1px solid $border; border-bottom: 1px solid $border; }
+
+// ============ الفوتر ============
+footer { padding: 60px 0 30px; }
+.footer-desc { color: $muted; font-size: 14px; max-width: 280px; }
+.footer-heading { font-family: 'HT Rakeez', sans-serif; font-size: 14px; color: $brass-light; margin-bottom: 18px; letter-spacing: 1px; }
+footer a { display: block; color: $cream-dim; font-size: 14px; margin-bottom: 12px; &:hover { color: $brass-light; } }
+.footer-bottom { padding-top: 26px; margin-top: 30px; border-top: 1px solid $border; font-size: 13px; color: $muted; }
+
+// ============ استجابة الشاشات الصغيرة ============
+@media (max-width: 860px) {
+  .hero-title { font-size: 32px; }
+}

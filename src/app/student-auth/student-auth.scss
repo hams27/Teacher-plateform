@@ -1,0 +1,102 @@
+$bg: #0e332b;
+$card-bg: #153f34;
+$brass: #b87333;
+$brass-light: #cf9a5c;
+$gold: #f2d9a8;
+$cream: #f2e6cd;
+$cream-dim: #c9bfa6;
+$muted: #8fa89c;
+$border: rgba(184, 115, 51, 0.35);
+$ease: cubic-bezier(.2, .8, .2, 1);
+
+:host { display: block; min-height: 100vh; background: $bg; color: $cream; font-family: 'HT Moshreq Pro', sans-serif; line-height: 1.8; overflow-x: clip; }
+
+@keyframes rise   { from { opacity: 0; transform: translateY(28px) scale(.98); } }
+@keyframes rise-s { from { opacity: 0; transform: translateY(16px); } }
+@keyframes spin   { to { transform: rotate(360deg); } }
+@keyframes twinkle { 0%,100% { opacity: .25; } 50% { opacity: 1; } }
+@keyframes bob    { 0%,100% { transform: translateY(var(--sy, 0)); } 50% { transform: translateY(calc(var(--sy, 0px) - 14px)); } }
+@keyframes dash   { to { stroke-dashoffset: -200; } }
+@keyframes walk   { from { transform: translateX(-320px); } to { transform: translateX(1900px); } }
+@keyframes sway   { 0%,100% { transform: rotate(-1.6deg); } 50% { transform: rotate(1.6deg); } }
+@keyframes shimmer { 0%,100% { opacity: .15; transform: scaleX(.85); } 50% { opacity: .6; transform: scaleX(1); } }
+@keyframes breathe { 0%,100% { opacity: .55; } 50% { opacity: .9; } }
+@keyframes shake  { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
+@keyframes stripes { to { background-position: 28px 0; } }
+@keyframes sweep  { 0%,55% { transform: translateX(-130%); } 100% { transform: translateX(130%); } }
+
+// ============ القسم + الخلفية ============
+.auth-section {
+  position: relative; overflow: hidden; min-height: calc(100vh - 80px); padding: 60px 20px;
+  --sy: 0px;
+  background: linear-gradient(180deg, #06201a 0%, #0e332b 42%, #4a3219 82%, #7a4a22 100%); // غروب (تسجيل الدخول)
+  &.register { --sy: -95px; background: linear-gradient(180deg, #0a3a36 0%, #1b5a4d 45%, #a06f30 85%, #d09a52 100%); } // شروق (حساب جديد)
+}
+.scene { position: absolute; inset: 0; pointer-events: none;
+  svg { width: 100%; height: 100%; display: block; }
+  .vignette { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 55% at 50% 50%, rgba(6,32,26,.55), transparent 75%), linear-gradient(180deg, rgba(6,32,26,.55), transparent 22%); }
+}
+.scene {
+  .stars circle { fill: $gold; animation: twinkle 3.5s ease-in-out infinite;
+    @for $i from 1 through 10 { &:nth-child(#{$i}) { animation-delay: #{$i * -0.55}s; animation-duration: #{2.6 + ($i % 4) * .7}s; } } }
+  .map { fill: none; stroke: $brass-light; stroke-opacity: .38; stroke-width: 1.2;
+    .rose { transform-box: view-box; transform-origin: 150px 170px; animation: spin 90s linear infinite; }
+    .route { stroke-dasharray: 3 9; stroke-width: 2; stroke-opacity: .55; animation: dash 14s linear infinite; }
+    .x { stroke-width: 3; stroke-linecap: round; stroke-opacity: .7; } }
+  .sun { transform: translateY(var(--sy)); transition: transform 1.2s $ease; animation: bob 9s ease-in-out infinite;
+    .disc { fill: $gold; filter: drop-shadow(0 0 28px rgba(242,217,168,.7)); }
+    .rays { stroke: $gold; stroke-width: 3; stroke-linecap: round; opacity: .6; transform-box: view-box; transform-origin: 800px 560px; animation: spin 60s linear infinite; } }
+  .caravan { animation: walk 80s linear infinite; }
+  .pyr, .mon { animation: breathe 7s ease-in-out infinite; }
+  .ripples path { stroke: $gold; stroke-width: 2; stroke-linecap: round; fill: none; transform-box: fill-box; transform-origin: center; animation: shimmer 4s ease-in-out infinite;
+    &:nth-child(2) { animation-delay: -1.3s; } &:nth-child(3) { animation-delay: -2.6s; } }
+  .palm { fill: none; stroke: #051915; stroke-width: 9; stroke-linecap: round; transform-box: view-box; animation: sway 6s ease-in-out infinite;
+    &.l { transform-origin: 110px 900px; } &.r { transform-origin: 1500px 900px; animation-delay: -3s; }
+    .trunk { stroke-width: 12; } }
+}
+
+// ============ بطاقة الدخول ============
+.auth-box {
+  position: relative; z-index: 2; width: 100%; max-width: 420px; padding: 54px 38px 36px;
+  background: rgba(21, 63, 52, .8); backdrop-filter: blur(14px) saturate(1.2);
+  border: 1px solid $border; border-radius: 4px; box-shadow: 0 30px 80px rgba(0,0,0,.5), inset 0 0 0 6px rgba(21,63,52,.8), inset 0 0 0 7px rgba(184,115,51,.22);
+  animation: rise 1s $ease both;
+  &::before { content: ''; position: absolute; top: 0; right: 0; left: 0; height: 2px; background: linear-gradient(90deg, transparent, $brass-light, transparent); }
+}
+.medal {
+  position: absolute; top: -30px; left: 50%; width: 60px; height: 60px; margin-left: -30px; border-radius: 50%; background: $bg; border: 1px solid $brass; box-shadow: 0 0 24px rgba(207,154,92,.35);
+  svg { width: 100%; height: 100%; padding: 8px; fill: none; stroke: $brass-light; stroke-width: 1.4; animation: spin 24s linear infinite; }
+}
+.eyebrow { font-size: 13px; letter-spacing: 3px; color: $brass-light; margin-bottom: 8px; animation: rise-s .8s $ease .3s both; }
+.auth-title { font-family: 'HT Rakeez', sans-serif; font-size: 25px; color: $cream; margin-bottom: 28px; animation: rise-s .8s $ease .4s both; }
+
+form > .mb-3 { animation: rise-s .7s $ease both; &:nth-of-type(1) { animation-delay: .5s; } &:nth-of-type(2) { animation-delay: .6s; } &:nth-of-type(3) { animation-delay: .7s; } }
+.form-label { color: $cream-dim; font-size: 14px; margin-bottom: 6px; }
+.form-control {
+  background: rgba(14, 51, 43, .85); border: 1px solid $border; color: $cream; border-radius: 4px; padding: 11px 14px; transition: all .35s $ease;
+  &:hover { border-color: rgba(207,154,92,.6); }
+  &:focus { background: $bg; border-color: $brass; color: $cream; box-shadow: 0 0 0 4px rgba(184,115,51,.16), 0 10px 26px rgba(0,0,0,.3); transform: translateY(-1px); }
+}
+.hint { color: $muted; font-size: 12px; }
+.error-text { color: #e07856; font-size: 13.5px; margin-bottom: 10px; animation: shake .5s ease both; }
+.ok-text { color: #7fcf9a; font-size: 13.5px; margin-bottom: 10px; animation: rise-s .5s $ease both; }
+
+.btn-brass {
+  position: relative; overflow: hidden; background: $brass; color: $bg; border: none; border-radius: 2px; font-weight: 500; transition: all .3s $ease; animation: rise-s .7s $ease .8s both;
+  &::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.4) 50%, transparent 70%); animation: sweep 3.8s ease-in-out infinite; }
+  &:hover:not(:disabled) { background: $brass-light; color: $bg; transform: translateY(-3px); box-shadow: 0 12px 30px rgba(184,115,51,.45); }
+  &:active:not(:disabled) { transform: translateY(0); }
+  &:disabled { opacity: .85; cursor: wait; background-image: repeating-linear-gradient(45deg, rgba(255,255,255,.2) 0 10px, transparent 10px 20px); background-size: 28px 28px; animation: stripes .7s linear infinite; &::after { display: none; } }
+}
+.link-btn { position: relative; background: none; border: none; color: $brass-light; font-size: 13.5px; display: block; margin-inline: auto; font-family: inherit; transition: color .3s;
+  &::after { content: ''; position: absolute; bottom: 0; right: 0; left: 0; height: 1px; background: $gold; transform: scaleX(0); transition: transform .4s $ease; }
+  &:hover { color: $gold; &::after { transform: scaleX(1); } } }
+.switch { margin: 24px 0 0; padding-top: 20px; border-top: 1px solid rgba(184,115,51,.2); color: $cream-dim; font-size: 14px;
+  a { position: relative; color: $brass-light; text-decoration: none; font-weight: 500; transition: color .3s; &:hover { color: $gold; text-decoration: underline; text-underline-offset: 5px; } } }
+
+@media (max-width: 575px) {
+  .auth-section { padding: 56px 14px 40px; }
+  .auth-box { padding: 50px 24px 28px; }
+  .scene .map { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

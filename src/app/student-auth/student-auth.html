@@ -1,0 +1,99 @@
+<app-site-nav></app-site-nav>
+
+<section class="auth-section d-flex align-items-center justify-content-center" [class.register]="mode === 'register'">
+
+  <!-- خلفية تاريخية: مصر القديمة + العصر الإسلامي + خريطة طريق قديمة -->
+  <div class="scene" aria-hidden="true">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">
+      <defs>
+        <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#f2d9a8" stop-opacity=".75"/><stop offset=".35" stop-color="#cf9a5c" stop-opacity=".3"/><stop offset="1" stop-color="#cf9a5c" stop-opacity="0"/></radialGradient>
+        <linearGradient id="nile" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d5b4b"/><stop offset="1" stop-color="#08241e"/></linearGradient>
+        <g id="camel"><path d="M2 20 Q6 12 17 13 L32 13 Q38 4 41 11 Q43 19 37 21 L37 35 H34 L33 23 H15 L14 35 H11 L10 23 Q2 25 2 20Z M36 14 Q46 8 47 0 L53 2 Q50 12 40 20Z"/><circle cx="24" cy="11" r="5"/></g>
+      </defs>
+
+      <!-- خريطة طريق قديمة + بوصلة -->
+      <g class="map">
+        <g class="rose"><circle cx="150" cy="170" r="62"/><circle cx="150" cy="170" r="44"/><path d="M150 100 V240 M80 170 H220 M101 121 L199 219 M199 121 L101 219"/></g>
+        <path class="route" d="M230 250 C470 120 700 330 960 190 S1380 130 1490 250"/>
+        <path class="x" d="M1478 238 l24 24 m0 -24 l-24 24"/>
+      </g>
+
+      <!-- نجوم -->
+      <g class="stars"><circle cx="300" cy="80" r="1.8"/><circle cx="520" cy="140" r="1.4"/><circle cx="760" cy="60" r="2"/><circle cx="980" cy="120" r="1.5"/><circle cx="1180" cy="70" r="1.8"/><circle cx="1400" cy="130" r="1.4"/><circle cx="640" cy="230" r="1.2"/><circle cx="1290" cy="230" r="1.5"/><circle cx="90" cy="300" r="1.4"/><circle cx="1520" cy="360" r="1.6"/></g>
+
+      <!-- الشمس -->
+      <g class="sun">
+        <circle cx="800" cy="560" r="340" fill="url(#sunGlow)"/>
+        <g class="rays"><path d="M800 410 V360 M800 710 V760 M650 560 H600 M950 560 H1000 M694 454 L659 419 M906 454 L941 419 M694 666 L659 701 M906 666 L941 701"/></g>
+        <circle cx="800" cy="560" r="82" class="disc"/>
+      </g>
+
+      <!-- كثبان بعيدة -->
+      <path d="M0 700 Q200 655 430 690 T870 682 T1290 692 T1600 668 V900 H0Z" fill="#124236"/>
+
+      <!-- قافلة جِمال -->
+      <g class="caravan" fill="#071f1a"><use href="#camel" x="0" y="640"/><use href="#camel" x="78" y="644"/><use href="#camel" x="156" y="640"/></g>
+
+      <!-- أهرامات (يسار) -->
+      <g class="pyr"><path d="M60 700 L250 430 L440 700Z" fill="#0b2d25"/><path d="M250 430 L440 700 H250Z" fill="#164a3b"/><path d="M380 700 L482 552 L584 700Z" fill="#0b2d25"/><path d="M482 552 L584 700 H482Z" fill="#164a3b"/><path d="M60 700 L250 430 L440 700" fill="none" stroke="#b87333" stroke-opacity=".5"/></g>
+
+      <!-- مسلة + قبة ومئذنة (يمين) -->
+      <g class="mon" fill="#0b2d25" stroke="#b87333" stroke-opacity=".4"><path d="M1478 700 L1486 450 L1500 424 L1514 450 L1522 700Z"/><path d="M1166 700 V630 a82 82 0 0 1 164 0 V700Z"/><path d="M1248 548 V520 M1240 528 h16"/><rect x="1352" y="400" width="22" height="300"/><path d="M1348 400 L1363 350 L1378 400Z"/><rect x="1346" y="484" width="34" height="9"/><rect x="1346" y="404" width="34" height="9"/><circle cx="1363" cy="342" r="4"/></g>
+
+      <!-- كثبان قريبة + النيل -->
+      <path d="M0 765 Q300 725 620 755 T1230 748 T1600 732 V900 H0Z" fill="#0b2e25"/>
+      <rect y="790" width="1600" height="110" fill="url(#nile)"/>
+      <g class="ripples"><path d="M560 820 H1040"/><path d="M640 846 H960"/><path d="M700 872 H900"/></g>
+
+      <!-- نخيل -->
+      <g class="palm l"><path d="M110 900 Q140 790 108 690" class="trunk"/><path d="M108 690 Q40 650 -10 700 M108 690 Q60 610 10 580 M108 690 Q116 600 150 540 M108 690 Q170 620 230 610 M108 690 Q180 670 240 720"/></g>
+      <g class="palm r"><path d="M1500 900 Q1470 800 1500 710" class="trunk"/><path d="M1500 710 Q1570 670 1620 720 M1500 710 Q1550 630 1600 600 M1500 710 Q1490 620 1455 560 M1500 710 Q1440 640 1380 630 M1500 710 Q1430 690 1370 740"/></g>
+    </svg>
+    <span class="vignette"></span>
+  </div>
+
+  <div class="auth-box">
+    <span class="medal" aria-hidden="true"><svg viewBox="0 0 60 60"><rect x="14" y="14" width="32" height="32"/><rect x="14" y="14" width="32" height="32" transform="rotate(45 30 30)"/><circle cx="30" cy="30" r="5"/></svg></span>
+    <p class="eyebrow text-center">{{ mode === 'login' ? 'أهلاً بيك تاني' : 'انضم للمنصة' }}</p>
+    <h1 class="auth-title text-center">{{ mode === 'login' ? 'تسجيل دخول الطالب' : 'إنشاء حساب جديد' }}</h1>
+
+    <form (ngSubmit)="submit()">
+      <div class="mb-3" *ngIf="mode === 'register'">
+        <label class="form-label">الاسم</label>
+        <input type="text" class="form-control" [(ngModel)]="name" name="name" autocomplete="name">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">البريد الإلكتروني</label>
+        <input type="email" class="form-control" dir="ltr" [(ngModel)]="email" name="email" autocomplete="email">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">كلمة المرور</label>
+        <input type="password" class="form-control" dir="ltr" [(ngModel)]="password" name="password"
+               [autocomplete]="mode === 'login' ? 'current-password' : 'new-password'">
+        <small class="hint" *ngIf="mode === 'register'">6 حروف أو أرقام على الأقل</small>
+      </div>
+
+      <p class="error-text" *ngIf="error()">{{ error() }}</p>
+      <p class="ok-text" *ngIf="info()">{{ info() }}</p>
+
+      <button type="submit" class="btn btn-brass w-100 py-3 mt-2" [disabled]="loading()">
+        {{ loading() ? 'لحظة...' : (mode === 'login' ? 'دخول' : 'إنشاء الحساب') }}
+      </button>
+
+      <button type="button" class="link-btn mt-3" *ngIf="mode === 'login'" (click)="forgot()">
+        نسيت كلمة المرور؟
+      </button>
+    </form>
+
+    <p class="switch text-center">
+      <ng-container *ngIf="mode === 'login'">
+        معندكش حساب؟ <a routerLink="/register" [queryParams]="{ returnUrl: null }">سجّل دلوقتي</a>
+      </ng-container>
+      <ng-container *ngIf="mode === 'register'">
+        عندك حساب؟ <a routerLink="/login">سجّل دخول</a>
+      </ng-container>
+    </p>
+  </div>
+</section>

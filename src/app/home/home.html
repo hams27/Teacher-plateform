@@ -1,0 +1,306 @@
+<!-- شريط تقدم القراءة + زر الرجوع لأعلى -->
+<div class="read-progress" aria-hidden="true"></div>
+<button type="button" class="to-top" aria-label="الرجوع لأعلى" (click)="toTop()">↑</button>
+
+<!-- ========================= Header ========================= -->
+<header class="site-header sticky-top">
+  <nav class="navbar navbar-expand-md container py-3">
+    <a class="navbar-brand logo" href="#">
+      أ.  أكمل على 
+      <span class="d-block logo-sub">تاريخ وجغرافيا — الثانوية العامة</span>
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+      aria-controls="mainNav" aria-expanded="false" aria-label="فتح القائمة">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-between" id="mainNav">
+      <ul class="navbar-nav mx-auto gap-md-4 mt-3 mt-md-0">
+        <li class="nav-item"><a class="nav-link" href="#about">عن المدرس</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/courses">الكورسات</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/articles">المقالات</a></li>
+        <li class="nav-item"><a class="nav-link" href="#testimonials">آراء الطلاب</a></li>
+      </ul>
+      <app-nav-user></app-nav-user>
+    </div>
+  </nav>
+</header>
+
+<!-- ========================= Hero ========================= -->
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true">
+    <span class="orb o1"></span><span class="orb o2"></span>
+    <span class="glow"></span>
+    <i class="p p1"></i><i class="p p2"></i><i class="p p3"></i><i class="p p4"></i><i class="p p5"></i><i class="p p6"></i>
+  </div>
+
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow hero-in" style="--d:.1s"><span class="pulse"></span>منصة تعليمية متكاملة</p>
+      <h1 class="hero-title">
+        <span class="ln"><span class="w" style="--d:.25s">التاريخ</span> <span class="w" style="--d:.33s">حكاية</span> <span class="w" style="--d:.41s">أمة</span></span>
+        <span class="ln"><span class="w" style="--d:.49s">والجغرافيا</span> <em class="w shimmer" style="--d:.57s">خريطة</em> <em class="w shimmer" style="--d:.65s">فهمها</em></span>
+      </h1>
+      <p class="hero-text hero-in" style="--d:.8s">
+        كورسات فيديو، ملخصات مركّزة، واختبارات تفاعلية في التاريخ والجغرافيا لطلاب الثانوية العامة —
+        بأسلوب مبسّط وممتع.
+      </p>
+      <div class="hero-cta hero-in" style="--d:.95s">
+        <a routerLink="/courses" class="btn btn-brass shine px-4 py-3">تصفح الكورسات</a>
+        <a href="#about" class="btn btn-outline-brass px-4 py-3">تعرّف على المدرس</a>
+      </div>
+
+      <div class="hero-stats hero-in" style="--d:1.1s">
+        <div class="stat"><div class="stat-num num">{{ site.stats.years }}</div><div class="stat-label">سنة خبرة</div></div>
+        <div class="stat"><div class="stat-num num">{{ site.stats.courses }}</div><div class="stat-label">كورس ومحاضرة</div></div>
+        <div class="stat"><div class="stat-num num">{{ site.stats.students }}</div><div class="stat-label">طالب وطالبة</div></div>
+      </div>
+    </div>
+
+    <!-- أسطرلاب: خريطة + بوصلة + نجمة هندسية -->
+    <div class="hero-art hero-in" style="--d:.5s" aria-hidden="true">
+      <div class="art-wrap">
+        <svg viewBox="0 0 500 500" class="astro">
+          <defs>
+            <radialGradient id="ag" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#cf9a5c" stop-opacity=".18"/><stop offset="1" stop-color="#cf9a5c" stop-opacity="0"/></radialGradient>
+          </defs>
+          <circle cx="250" cy="250" r="235" fill="url(#ag)"/>
+          <g class="spin-slow"><circle cx="250" cy="250" r="236" class="ring dash"/><circle cx="250" cy="14" r="6" class="jewel"/></g>
+          <g class="spin-rev"><circle cx="250" cy="250" r="212" class="ring ticks"/></g>
+          <g class="spin-mid">
+            <rect x="143.9" y="143.9" width="212.2" height="212.2" class="ring"/>
+            <rect x="143.9" y="143.9" width="212.2" height="212.2" class="ring" transform="rotate(45 250 250)"/>
+          </g>
+          <circle cx="250" cy="250" r="118" class="ring solid"/>
+          <g class="globe">
+            <ellipse cx="250" cy="250" rx="118" ry="44" class="ring thin"/>
+            <ellipse cx="250" cy="250" rx="44" ry="118" class="ring thin"/>
+            <ellipse cx="250" cy="250" rx="82" ry="118" class="ring thin"/>
+            <line x1="132" y1="250" x2="368" y2="250" class="ring thin"/>
+            <line x1="250" y1="132" x2="250" y2="368" class="ring thin"/>
+          </g>
+          <g class="needle"><polygon points="250,150 258,250 250,262 242,250" class="n-up"/><polygon points="250,350 258,250 250,238 242,250" class="n-dn"/></g>
+          <circle cx="250" cy="250" r="9" class="hub"/><circle cx="250" cy="250" r="3.5" fill="#0e332b"/>
+        </svg>
+        <span class="chip c1">▶ فيديو</span>
+        <span class="chip c2">PDF ملخص</span>
+        <span class="chip c3">✓ اختبار</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- شريط المحاور المتحرك -->
+<div class="marquee" aria-hidden="true">
+  <div class="track">
+    <ng-container *ngFor="let r of [1,2]">
+      <span>الحضارة المصرية القديمة</span><i class="star"></i>
+      <span>العصر الإسلامي</span><i class="star"></i>
+      <span>التاريخ الحديث والمعاصر</span><i class="star"></i>
+      <span>المناخ والغلاف الجوي</span><i class="star"></i>
+      <span>الخرائط والإحداثيات</span><i class="star"></i>
+      <span>الموارد الطبيعية</span><i class="star"></i>
+      <span>مراجعات نهائية</span><i class="star"></i>
+    </ng-container>
+  </div>
+</div>
+
+<!-- ========================= About ========================= -->
+<section class="section-alt" id="about">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-md-5 rv">
+        <div class="photo-stage tilt">
+          <span class="frame" aria-hidden="true"></span>
+          <span class="bg-star" aria-hidden="true"></span>
+          <div class="about-photo d-flex align-items-center justify-content-center"><img src="teacherimg.png" alt=""> </div>
+          <div class="exp-badge"><b class="num">{{ site.stats.years }}</b><span>سنة خبرة</span></div>
+        </div>
+      </div>
+      <div class="col-md-7">
+        <p class="eyebrow rv"><span class="pulse"></span>عن المدرس</p>
+        <h2 class="section-title-lg rv" style="--d:.08s">خبرة تمتد لسنوات في تبسيط التاريخ والجغرافيا</h2>
+        <p class="about-desc rv" style="--d:.16s">
+          أ. أكمل على، مدرس تاريخ وجغرافيا لمرحلة الثانوية العامة، بخبرة تزيد عن 15 عامًا في تدريس
+          المنهج المصري، وإعداد ملخصات ومراجعات ساعدت آلاف الطلاب على فهم المادة بعمق بدل الحفظ الأصم.
+        </p>
+        <ul class="list-unstyled credentials">
+          <li class="rv" style="--d:.24s"><span class="dot"></span> ليسانس آداب تاريخ — جامعة القاهرة</li>
+          <li class="rv" style="--d:.32s"><span class="dot"></span> إعداد تربوي متخصص في المناهج الاجتماعية</li>
+          <li class="rv" style="--d:.40s"><span class="dot"></span> مؤلف سلسلة ملخصات "خريطة التاريخ"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= Courses ========================= -->
+<section id="courses">
+  <div class="container">
+    <div class="section-head text-center mx-auto mb-5 rv">
+      <div class="divider mb-3"><span class="line"></span><span class="star"></span><span class="line"></span></div>
+      <h2 class="section-title">الكورسات</h2>
+      <p class="section-sub">محاضرات مسجلة مقسّمة حسب الوحدات، مع ملخص PDF واختبار بعد كل درس</p>
+    </div>
+
+    <div class="row g-4" *ngIf="courses().length > 0; else noCourses">
+      <div class="col-md-4 rv" *ngFor="let c of courses(); let i = index" [style.--d]="(i % 3) * 120 + 'ms'">
+        <app-course-card class="spot tilt" [course]="c"></app-course-card>
+      </div>
+    </div>
+
+    <ng-template #noCourses>
+      <div class="row g-4" *ngIf="loading(); else emptyCourses">
+        <span class="visually-hidden">جاري تحميل الكورسات...</span>
+        <div class="col-md-4" *ngFor="let s of [1,2,3]"><div class="skeleton"></div></div>
+      </div>
+      <ng-template #emptyCourses>
+        <p class="text-center" style="color:#8fa89c">الكورسات الجديدة هتتضاف قريب</p>
+      </ng-template>
+    </ng-template>
+
+    <div class="text-center mt-5 rv" *ngIf="courses().length > 0">
+      <a routerLink="/courses" class="btn btn-outline-brass px-4 py-3">كل الكورسات</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= Journey ========================= -->
+<section class="section-alt journey">
+  <div class="container">
+    <div class="section-head text-center mx-auto mb-5 rv">
+      <div class="divider mb-3"><span class="line"></span><span class="star"></span><span class="line"></span></div>
+      <h2 class="section-title">إزاي بتذاكر معانا؟</h2>
+      <p class="section-sub">ثلاث خطوات بعد كل درس، لحد ما المعلومة تثبت</p>
+    </div>
+    <div class="steps">
+      <div class="step rv" style="--d:0s"><span class="n">1</span><h3>شاهد الشرح</h3><p>محاضرة مسجلة مقسّمة حسب الوحدات، تشوفها في أي وقت وبالسرعة اللي تناسبك.</p></div>
+      <div class="step rv" style="--d:.15s"><span class="n">2</span><h3>لخّص وثبّت</h3><p>ملخص PDF مركّز بعد كل درس عشان تراجع المعلومة في دقايق.</p></div>
+      <div class="step rv" style="--d:.3s"><span class="n">3</span><h3>اختبر نفسك</h3><p>اختبار قصير بعد كل درس، وتتابع درجاتك من صفحة «تقدمي».</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= Articles ========================= -->
+<section id="articles">
+  <div class="container">
+    <div class="section-head text-center mx-auto mb-5 rv">
+      <div class="divider mb-3"><span class="line"></span><span class="star"></span><span class="line"></span></div>
+      <h2 class="section-title">من المكتبة</h2>
+      <p class="section-sub">مقالات وملخصات مجانية لتثبيت المعلومة</p>
+    </div>
+
+    <div class="article-list" *ngIf="articles().length > 0; else noArticles">
+      <a class="article-row d-flex justify-content-between align-items-center rv"
+         *ngFor="let a of articles(); let i = index" [style.--d]="i * 100 + 'ms'" [routerLink]="['/articles', a.id]">
+        <div>
+          <p class="article-meta">
+            <span class="cat" *ngIf="a.category">{{ a.category }}</span>
+            <span *ngIf="dateOf(a)">{{ dateOf(a) }}</span>
+          </p>
+          <h3 class="article-title">{{ a.title }}</h3>
+        </div>
+        <span class="article-arrow">←</span>
+      </a>
+    </div>
+
+    <ng-template #noArticles>
+      <p class="text-center" style="color:#8fa89c">المقالات الجديدة هتتضاف قريب</p>
+    </ng-template>
+
+    <div class="text-center mt-5 rv" *ngIf="articles().length > 0">
+      <a routerLink="/articles" class="btn btn-outline-brass px-4 py-3">كل المقالات</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= Testimonials ========================= -->
+<section class="section-alt" id="testimonials">
+  <div class="container">
+    <div class="section-head text-center mx-auto mb-5 rv">
+      <div class="divider mb-3"><span class="line"></span><span class="star"></span><span class="line"></span></div>
+      <h2 class="section-title">آراء الطلاب</h2>
+      <p class="section-sub">تجارب حقيقية من طلاب استخدموا المنصة</p>
+    </div>
+
+    <div class="row g-4 justify-content-center" *ngIf="testimonials().length > 0; else noTesti">
+      <div class="col-md-4 rv" *ngFor="let t of testimonials(); let i = index" [style.--d]="i * 120 + 'ms'">
+        <div class="card testi-card h-100">
+          <span class="qmark" aria-hidden="true">”</span>
+          <p class="testi-text">"{{ t.text }}"</p>
+          <div class="testi-who">
+            <span class="avatar">{{ t.userName.charAt(0) }}</span>
+            <div><p class="testi-name">{{ t.userName }}</p><p class="testi-role">طالب في المنصة</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #noTesti>
+      <p class="text-center" style="color:#8fa89c">لسه مفيش آراء، كوني أول واحدة تكتب رأيها 👇</p>
+    </ng-template>
+
+    <!-- إضافة رأي -->
+    <div class="text-center mt-5">
+      <button type="button" class="btn btn-outline-brass px-4 py-3" *ngIf="!showOpinionForm()" (click)="openOpinion()">
+        ✍ أضف رأيك
+      </button>
+      <p class="opinion-msg" [class.err]="opinionError()" *ngIf="opinionMsg()">{{ opinionMsg() }}</p>
+    </div>
+
+    <form class="opinion-form mx-auto mt-4" *ngIf="showOpinionForm()" (ngSubmit)="sendOpinion()">
+      <label class="form-label">رأيك في المنصة</label>
+      <textarea class="form-control" rows="4" [maxLength]="maxLen" [(ngModel)]="opinionText" name="opinion"
+                placeholder="اكتب تجربتك مع المنصة..."></textarea>
+      <div class="d-flex justify-content-between align-items-center mt-2">
+        <small class="counter">{{ opinionText.length }} / {{ maxLen }}</small>
+        <small class="counter">لو كتبت رأي قبل كده هيتبدّل بالجديد</small>
+      </div>
+      <p class="opinion-msg err" *ngIf="opinionError() && opinionMsg()">{{ opinionMsg() }}</p>
+      <div class="d-flex gap-3 mt-3">
+        <button type="submit" class="btn btn-brass flex-fill py-2" [disabled]="opinionSaving()">
+          {{ opinionSaving() ? 'جاري الإرسال...' : 'إرسال' }}
+        </button>
+        <button type="button" class="btn btn-outline-brass flex-fill py-2" (click)="closeOpinion()">إلغاء</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ========================= CTA band ========================= -->
+<section class="cta-band text-center">
+  <span class="cta-star" aria-hidden="true"></span>
+  <div class="container rv">
+    <h2 class="section-title">ابدأ رحلتك في فهم التاريخ والجغرافيا اليوم</h2>
+    <p class="section-sub mb-4">انضم لآلاف الطلاب اللي غيّروا طريقة مذاكرتهم للمادة</p>
+    <a href="#courses" class="btn btn-brass shine px-4 py-3">تصفح الكورسات الآن</a>
+  </div>
+</section>
+
+<!-- ========================= Footer ========================= -->
+<footer>
+  <div class="container">
+    <div class="row g-4 footer-grid">
+      <div class="col-md-5">
+        <p class="logo mb-2">أ. أكمل على</p>
+        <p class="footer-desc">منصة تعليمية متخصصة في تدريس التاريخ والجغرافيا لطلاب الثانوية العامة.</p>
+      </div>
+      <div class="col-md-3">
+        <h4 class="footer-heading">روابط سريعة</h4>
+        <a href="#about">عن المدرس</a>
+        <a href="#courses">الكورسات</a>
+        <a href="#articles">المقالات</a>
+      </div>
+      <div class="col-md-3">
+        <h4 class="footer-heading">تواصل</h4>
+        <a [href]="site.links.whatsapp" [attr.target]="isExternal(site.links.whatsapp) ? '_blank' : null" rel="noopener">واتساب</a>
+        <a [href]="site.links.facebook" [attr.target]="isExternal(site.links.facebook) ? '_blank' : null" rel="noopener">فيسبوك</a>
+        <a [href]="site.links.youtube" [attr.target]="isExternal(site.links.youtube) ? '_blank' : null" rel="noopener">يوتيوب</a>
+      </div>
+    </div>
+    <div class="footer-bottom d-flex justify-content-between flex-wrap gap-2">
+      <span>© 2026 أ. أكمل على — جميع الحقوق محفوظة</span>
+      <span>صُنع بعناية لكل طالب يبحث عن الفهم</span>
+    </div>
+  </div>
+</footer>

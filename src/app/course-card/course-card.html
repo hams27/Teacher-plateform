@@ -1,0 +1,22 @@
+<div class="card course-card h-100">
+  <div class="card-thumb d-flex align-items-center justify-content-center">
+    ◆
+    <button
+      type="button"
+      class="fav-btn"
+      [class.on]="fav.isFav(course().id)"
+      [attr.aria-label]="fav.isFav(course().id) ? 'إزالة من المفضلة' : 'إضافة للمفضلة'"
+      [title]="fav.isFav(course().id) ? 'إزالة من المفضلة' : 'إضافة للمفضلة'"
+      (click)="toggleFav()"
+    >{{ fav.isFav(course().id) ? '♥' : '♡' }}</button>
+  </div>
+  <div class="card-body">
+    <p class="card-tag">{{ course().tag }}</p>
+    <h3 class="card-title-brass">{{ course().title }}</h3>
+    <p class="card-desc">{{ course().desc }}</p>
+    <div class="card-foot d-flex justify-content-between align-items-center">
+      <span class="price">{{ course().price }} ج.م</span>
+      <a [routerLink]="['/courses', course().id]" class="card-link">تفاصيل ←</a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,131 @@
+$bg: #0e332b;
+$card-bg: #153f34;
+$brass: #b87333;
+$brass-light: #cf9a5c;
+$gold: #f2d9a8;
+$cream: #f2e6cd;
+$cream-dim: #c9bfa6;
+$muted: #8fa89c;
+$border: rgba(184, 115, 51, 0.35);
+$ease: cubic-bezier(.2, .8, .2, 1);
+
+$tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cg fill='none' stroke='%23b87333' stroke-opacity='.55'%3E%3Crect x='20' y='20' width='40' height='40'/%3E%3Cpolygon points='40,12 68,40 40,68 12,40'/%3E%3C/g%3E%3C/svg%3E");
+$bigstar: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='%23cf9a5c' stroke-width='.6'%3E%3Crect x='45' y='45' width='110' height='110'/%3E%3Crect x='45' y='45' width='110' height='110' transform='rotate(45 100 100)'/%3E%3Ccircle cx='100' cy='100' r='78'/%3E%3Ccircle cx='100' cy='100' r='96'/%3E%3C/g%3E%3C/svg%3E");
+
+:host { display: block; min-height: 100vh; background: $bg; color: $cream; font-family: 'HT Moshreq Pro', sans-serif; line-height: 1.8; overflow-x: clip; }
+a { text-decoration: none; }
+
+@keyframes rise  { from { opacity: 0; transform: translateY(26px); } }
+@keyframes word  { from { transform: translateY(115%); } }
+@keyframes spin  { to { transform: rotate(360deg); } }
+@keyframes sheen { to { background-position: -200% 0; } }
+@keyframes rain  { 0% { transform: translateY(40px); opacity: 0; } 20%,80% { opacity: .8; } 100% { transform: translateY(-120px); opacity: 0; } }
+@keyframes drift { to { transform: translate(80px, 80px); } }
+@keyframes wander { 0%,100% { background-position: 30% 40%; } 50% { background-position: 70% 60%; } }
+@keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes grow  { from { width: 0; } }
+@keyframes fill  { from { stroke-dashoffset: 163.4; } }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+@keyframes sweep { 0%,55% { transform: translateX(-130%); } 100% { transform: translateX(130%); } }
+
+.in-up { animation: rise .9s $ease var(--d, 0s) both; }
+.star { background: $brass; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+
+// ظهور مع السكرول (لو المتصفح بيدعم)، وإلا ظهور عادي عند التحميل
+.reveal { animation: rise .9s $ease var(--d, 0s) both; }
+@supports (animation-timeline: view()) {
+  .reveal { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 45%; }
+}
+
+// ============ عنوان الصفحة ============
+.page-hero { position: relative; overflow: hidden; padding: 80px 0 44px; }
+.hero-deco {
+  position: absolute; inset: 0; pointer-events: none;
+  &::before { content: ''; position: absolute; inset: -80px; background: $tile; opacity: .09; animation: drift 40s linear infinite;
+    -webkit-mask-image: radial-gradient(ellipse 60% 80% at 50% 40%, #000, transparent 75%); mask-image: radial-gradient(ellipse 60% 80% at 50% 40%, #000, transparent 75%); }
+  .glow { position: absolute; inset: 0; background: radial-gradient(closest-side, rgba(207,154,92,.14), transparent) 30% 40% / 60% 120% no-repeat; animation: wander 14s ease-in-out infinite; }
+  .big-star { position: absolute; top: 50%; left: 50%; width: 520px; height: 520px; margin: -270px 0 0 -260px; background: $bigstar center/contain no-repeat; opacity: .17; animation: spin 100s linear infinite; }
+  .p { position: absolute; bottom: 25%; width: 4px; height: 4px; border-radius: 50%; background: $brass-light; animation: rain 7s linear infinite; }
+  .p1 { right: 16%; } .p2 { right: 38%; animation-delay: -2.5s; } .p3 { right: 62%; animation-delay: -4s; } .p4 { right: 84%; animation-delay: -1s; }
+}
+.page-hero .container { position: relative; }
+.divider { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 14px;
+  .line { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, $brass-light, transparent); }
+  .star { width: 14px; height: 14px; animation: spin 8s linear infinite; } }
+.page-title {
+  font-family: 'HT Rakeez', sans-serif; font-weight: 700; font-size: 42px; margin-bottom: 10px; color: $cream;
+  .ln { display: block; overflow: hidden; padding: .12em 0; }
+  .w { display: inline-block; animation: word 1s $ease var(--d, 0s) both; }
+  .shimmer { background: linear-gradient(100deg, $brass 20%, $gold 45%, $brass-light 55%, $brass 80%); background-size: 200% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent; animation: word 1s $ease var(--d, 0s) both, sheen 4s linear 1.6s infinite; }
+}
+.page-sub { color: $cream-dim; font-size: 16px; max-width: 480px; }
+
+// ============ الإحصائيات ============
+.progress-section { padding: 30px 0 100px; }
+.stat-box {
+  position: relative; overflow: hidden; height: 100%; background: $card-bg; border: 1px solid $border; border-radius: 4px; padding: 26px 20px; text-align: center;
+  transition: transform .45s $ease, border-color .4s, box-shadow .4s;
+  &::before { content: ''; position: absolute; top: 0; right: 0; left: 0; height: 2px; background: linear-gradient(90deg, transparent, $brass-light, transparent); }
+  &::after { content: ''; position: absolute; top: 12px; left: 12px; width: 9px; height: 9px; background: $brass; opacity: .5; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+  &:hover { transform: translateY(-6px); border-color: $brass; box-shadow: 0 20px 40px rgba(0,0,0,.35); }
+}
+.stat-num { font-family: 'HT Rakeez', sans-serif; font-size: 34px; line-height: 1.4; color: $brass-light; }
+.stat-label { color: $cream-dim; font-size: 13px; }
+
+// ============ بلوك الكورس ============
+.course-block {
+  position: relative; background: $card-bg; border: 1px solid $border; border-radius: 6px; padding: 28px; margin-bottom: 28px; transition: border-color .4s, box-shadow .4s;
+  &:hover { border-color: rgba(207,154,92,.6); box-shadow: 0 18px 44px rgba(0,0,0,.3); }
+}
+.course-name { font-family: 'HT Rakeez', sans-serif; font-size: 21px; margin: 0 0 4px; }
+.course-meta { display: flex; flex-wrap: wrap; gap: 8px 14px; color: $muted; font-size: 13.5px; margin: 0;
+  .avg { color: $brass-light; border: 1px solid $border; border-radius: 20px; padding: 0 12px; } }
+
+// حلقة النسبة
+.ring { position: relative; width: 64px; height: 64px; flex-shrink: 0;
+  svg { width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+  circle { fill: none; stroke-width: 4; }
+  .trk { stroke: rgba(255,255,255,.08); }
+  .val { stroke: $brass-light; stroke-linecap: round; stroke-dasharray: 163.4; stroke-dashoffset: calc(163.4 * (100 - var(--p, 0)) / 100); animation: fill 1.6s $ease .3s both; filter: drop-shadow(0 0 5px rgba(207,154,92,.5)); }
+  .pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'HT Rakeez', sans-serif; font-size: 14px; color: $cream; margin: 0; }
+  &.full .val { stroke: #8fd6a9; filter: drop-shadow(0 0 6px rgba(143,214,169,.6)); }
+}
+.bar { position: relative; height: 8px; background: rgba(255,255,255,.07); border-radius: 5px; overflow: hidden; margin-bottom: 22px;
+  span { display: block; height: 100%; border-radius: 5px; background: linear-gradient(90deg, $brass, $brass-light, $gold); animation: grow 1.6s $ease .3s both; position: relative; overflow: hidden;
+    &::after { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.45) 50%, transparent 70%); animation: sweep 3.2s ease-in-out 2s infinite; } } }
+
+// ============ الجدول ============
+.table-wrap { overflow-x: auto; }
+.lessons-table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+  th { text-align: right; color: $muted; font-weight: 400; padding: 8px 12px; border-bottom: 1px solid $border; white-space: nowrap; }
+  td { padding: 12px; border-bottom: 1px solid rgba(184,115,51,.15); color: $cream-dim; transition: color .3s, background .3s; }
+  tbody tr { animation: rise .6s $ease var(--d, 0s) both; &:hover td { background: rgba(184,115,51,.08); color: $cream; } &:last-child td { border-bottom: 0; } }
+}
+.tag { display: inline-block; font-size: 12.5px; padding: 2px 12px; border-radius: 12px; white-space: nowrap; }
+.tag.ok { background: rgba(95,174,126,.16); color: #8fd6a9; }
+.tag.wait { background: rgba(224,164,86,.16); color: #e0a456; &::before { content: ''; display: inline-block; width: 6px; height: 6px; margin-inline-end: 7px; border-radius: 50%; background: #e0a456; animation: blink 1.4s ease-in-out infinite; } }
+.tag.new { background: rgba(255,255,255,.06); color: $muted; }
+.score { font-family: 'HT Rakeez', sans-serif; &.good { color: #8fd6a9; } &.low { color: #e0a456; } }
+
+// ============ تحميل وفراغ ============
+.skeleton { height: 280px; border: 1px solid $border; border-radius: 6px; background: linear-gradient(100deg, $card-bg 30%, #1d4f42 50%, $card-bg 70%); background-size: 200% 100%; animation: sheen 1.6s linear infinite; }
+.empty { animation: rise .7s $ease both;
+  .empty-star { display: block; width: 72px; height: 72px; margin: 0 auto 18px; background: $bigstar center/contain no-repeat; animation: spin 20s linear infinite, floaty 4s ease-in-out infinite; filter: drop-shadow(0 0 12px rgba(207,154,92,.35)); }
+  .empty-title { font-family: 'HT Rakeez', sans-serif; font-size: 22px; } }
+
+// ============ الأزرار ============
+.btn-brass, .btn-outline-brass { position: relative; overflow: hidden; transition: all .3s $ease; border-radius: 2px; }
+.btn-brass { background: $brass; color: $bg; font-weight: 500; &:hover { background: $brass-light; color: $bg; transform: translateY(-3px); box-shadow: 0 10px 28px rgba(184,115,51,.4); } }
+.btn-outline-brass { border: 1px solid $brass; color: $brass-light; &:hover { background: $brass; color: $bg; transform: translateY(-3px); box-shadow: 0 10px 28px rgba(184,115,51,.25); } }
+.shine::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.4) 50%, transparent 70%); animation: sweep 3.8s ease-in-out infinite; }
+
+@media (max-width: 860px) {
+  .page-hero { padding: 56px 0 30px; }
+  .page-title { font-size: 30px; }
+  .course-block { padding: 20px 16px; }
+  .stat-num { font-size: 28px; }
+  .big-star { width: 340px !important; height: 340px !important; margin: -170px 0 0 -170px !important; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

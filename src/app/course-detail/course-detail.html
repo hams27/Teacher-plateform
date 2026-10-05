@@ -1,0 +1,272 @@
+<app-site-nav></app-site-nav>
+
+<section class="detail-hero" *ngIf="state() !== 'ready'">
+  <div class="container text-center py-5">
+    <p class="course-title" *ngIf="state() === 'loading'">جاري تحميل الكورس...</p>
+    <ng-container *ngIf="state() === 'closed'">
+      <h1 class="course-title">الكورس ده مغلق حاليًا</h1>
+      <p class="course-lead">تقدر تتصفح باقي الكورسات المتاحة</p>
+    </ng-container>
+    <ng-container *ngIf="state() === 'notfound'">
+      <h1 class="course-title">الكورس مش موجود</h1>
+      <p class="course-lead">اللينك ده غلط أو الكورس اتحذف</p>
+    </ng-container>
+    <a routerLink="/courses" class="btn btn-brass px-4 py-3 mt-3" *ngIf="state() !== 'loading'">رجوع للكورسات</a>
+  </div>
+</section>
+
+<ng-container *ngIf="state() === 'ready'">
+<!-- ========================= Breadcrumb + course header ========================= -->
+<section class="detail-hero">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/">الرئيسية</a></li>
+        <li class="breadcrumb-item"><a routerLink="/courses">الكورسات</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ course().title }}</li>
+      </ol>
+    </nav>
+
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <p class="course-tag">{{ course().tag }}</p>
+        <h1 class="course-title">{{ course().title }}</h1>
+        <p class="course-lead">{{ course().shortDesc }}</p>
+
+        <div class="d-flex flex-wrap align-items-center gap-4 meta-row">
+          <span class="meta-item" *ngIf="ratingCount() > 0"><i>★</i> {{ ratingAvg() }} ({{ ratingCount() }} تقييم)</span>
+          <span class="meta-item">{{ units().length }} وحدات · {{ totalLessons }} حصة</span>
+          <span class="meta-item" *ngIf="course().addedAt">أُضيف {{ course().addedAt }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="row g-5 detail-body">
+
+    <!-- ========================= Main content ========================= -->
+    <div class="col-lg-8">
+
+      <div class="player-wrap" *ngIf="player() as p; else noPlayer">
+        <div id="yt-wrap" class="yt-wrap" *ngIf="p.kind === 'youtube'"></div>
+        <iframe *ngIf="p.kind === 'iframe'" [src]="p.iframeSrc!" title="فيديو الكورس" allowfullscreen
+                allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        <video *ngIf="p.kind === 'video'" [src]="p.videoSrc!" controls controlsList="nodownload"
+               (ended)="onVideoEnded()" (loadedmetadata)="onVideoMeta($event)" (timeupdate)="onVideoTime($event)"
+               (seeking)="onVideoBreak()" (pause)="onVideoBreak()"></video>
+      </div>
+      <div class="now-row d-flex justify-content-between align-items-center flex-wrap gap-2" *ngIf="player() && playingTitle()">
+        <p class="now-playing">▶ {{ playingTitle() }}</p>
+        <div class="d-flex gap-2 flex-wrap">
+          <button type="button" class="rate-btn" *ngIf="currentLesson() && player()?.kind === 'iframe' && !currentProgress()?.watched"
+                  (click)="confirmWatched()">✓ خلّصت المشاهدة</button>
+          <button type="button" class="rate-btn" *ngIf="currentLesson()" (click)="promptRating(true)">
+            ★ {{ myRatings().has(currentLesson()!.id) ? 'غيّر تقييمك' : 'قيّم الدرس' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- نسبة المشاهدة -->
+      <div class="watch-box" *ngIf="currentLesson() && auth.currentUser() && !currentProgress()?.watched">
+        <div class="d-flex justify-content-between mb-1">
+          <small>شوفي الدرس كامل من غير تقديم عشان {{ currentQuiz().length ? 'الامتحان يتفتح' : 'الدرس اللي بعده يتفتح' }}</small>
+          <small *ngIf="player()?.kind !== 'iframe'">{{ watchPct() }}%</small>
+        </div>
+        <div class="bar" *ngIf="player()?.kind !== 'iframe'"><span [style.width.%]="watchPct()"></span></div>
+        <small class="warn" *ngIf="watchMsg()">{{ watchMsg() }}</small>
+      </div>
+
+      <!-- شريط تقدم الكورس -->
+      <div class="progress-strip" *ngIf="auth.currentUser() && trackable() > 0">
+        <div class="d-flex justify-content-between mb-1">
+          <span>تقدمك في الكورس</span>
+          <span>{{ doneCount() }} / {{ trackable() }} درس ({{ progressPct() }}%)</span>
+        </div>
+        <div class="bar big"><span [style.width.%]="progressPct()"></span></div>
+      </div>
+
+      <!-- الامتحان القصير (بيظهر بعد المشاهدة الكاملة) -->
+      <section class="quiz-panel" *ngIf="showQuiz()">
+        <h3 class="quiz-title">امتحان سريع — {{ playingTitle() }}</h3>
+        <p class="quiz-sub">لازم تجيبي {{ passPercent }}% أو أكتر عشان الدرس اللي بعده يتفتح</p>
+
+        <div class="quiz-q" *ngFor="let q of currentQuiz(); let qi = index">
+          <p class="q-text">{{ qi + 1 }}. {{ q.q }}</p>
+          <label class="q-opt" *ngFor="let o of q.options; let oi = index"
+                 [class.sel]="answers()[qi] === oi"
+                 [class.bad]="quizResult() && !quizResult()!.passed && quizResult()!.wrong.includes(qi) && answers()[qi] === oi">
+            <input type="radio" [name]="'quiz' + qi" [checked]="answers()[qi] === oi" (change)="pick(qi, oi)">
+            <span>{{ o }}</span>
+          </label>
+        </div>
+
+        <div class="quiz-result fail" *ngIf="quizResult() && !quizResult()!.passed">
+          درجتك {{ quizResult()!.score }}% — محتاجة {{ passPercent }}%. الإجابات الغلط متعلّم عليها، غيّريها وسلّمي تاني.
+        </div>
+        <div class="quiz-result ok" *ngIf="quizResult() && quizResult()!.passed">
+          برافو! درجتك {{ quizResult()!.score }}% ✓
+        </div>
+
+        <div class="d-flex gap-3 mt-3">
+          <button type="button" class="btn btn-brass px-4" [disabled]="!allAnswered || savingQuiz() || !!quizResult()?.passed" (click)="submitQuiz()">
+            {{ savingQuiz() ? 'جاري الحفظ...' : 'تسليم' }}
+          </button>
+          <button type="button" class="btn btn-outline-brass px-4" *ngIf="retaking()" (click)="retaking.set(false)">إلغاء</button>
+        </div>
+      </section>
+
+      <!-- نجحت في الدرس -->
+      <section class="quiz-panel passed" *ngIf="showPassed()">
+        <h3 class="quiz-title">✓ خلّصتي الدرس ده</h3>
+        <p class="quiz-sub" *ngIf="currentProgress()?.bestScore !== undefined">
+          أعلى درجة ليكي في الامتحان: {{ currentProgress()!.bestScore }}%
+        </p>
+        <div class="d-flex gap-3 flex-wrap">
+          <button type="button" class="btn btn-brass px-4" *ngIf="nextFlat()" (click)="openNext()">الدرس اللي بعده ←</button>
+          <button type="button" class="btn btn-outline-brass px-4" *ngIf="currentQuiz().length" (click)="startRetake()">إعادة الامتحان</button>
+        </div>
+        <p class="quiz-sub mt-3 mb-0" *ngIf="!nextFlat()">ده كان آخر درس في الكورس 🎉</p>
+      </section>
+
+      <ng-template #noPlayer>
+        <div class="thumb-preview d-flex align-items-center justify-content-center">
+          مفيش فيديو معاينة للكورس ده لسه
+        </div>
+      </ng-template>
+
+      <!-- Tabs -->
+      <div class="tabs-bar d-flex gap-4">
+        <button type="button" class="tab-btn" [class.active]="activeTab === 'description'" (click)="setTab('description')">
+          وصف الكورس
+        </button>
+        <button type="button" class="tab-btn" [class.active]="activeTab === 'content'" (click)="setTab('content')">
+          محتوى الكورس
+        </button>
+        <button type="button" class="tab-btn" [class.active]="activeTab === 'reviews'" (click)="setTab('reviews')">
+          التقييمات
+        </button>
+      </div>
+
+      <!-- Description tab -->
+      <div class="tab-panel" *ngIf="activeTab === 'description'">
+        <h2 class="panel-heading">عن الكورس</h2>
+        <p class="panel-text">{{ course().fullDesc }}</p>
+
+        <ng-container *ngIf="course().outcomes.length > 0">
+          <h2 class="panel-heading mt-4">هتخرج من الكورس عارف</h2>
+          <ul class="checklist">
+            <li *ngFor="let point of course().outcomes"><span class="check">✓</span> {{ point }}</li>
+          </ul>
+        </ng-container>
+
+        <div class="instructor-card d-flex align-items-center gap-3 mt-5">
+          <div class="instructor-avatar">{{ instructorInitials() }}</div>
+          <div>
+            <p class="instructor-name">{{ course().instructorName }}</p>
+            <p class="instructor-role">{{ course().instructorRole }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content tab (accordion) -->
+      <div class="tab-panel" *ngIf="activeTab === 'content'">
+        <div class="empty-note" *ngIf="units().length === 0">المحتوى لسه هيتضاف قريب</div>
+        <div class="lock-msg" *ngIf="lockedMsg()">{{ lockedMsg() }}</div>
+        <div class="units-summary" *ngIf="units().length > 0">{{ units().length }} وحدات · {{ totalLessons }} حصة</div>
+
+        <div class="unit-block" *ngFor="let unit of units(); let i = index">
+          <button type="button" class="unit-header d-flex justify-content-between align-items-center" (click)="toggleUnit(i)">
+            <span class="unit-title">{{ unit.title }}</span>
+            <span class="unit-toggle">{{ expandedUnit === i ? '−' : '+' }}</span>
+          </button>
+
+          <ul class="lesson-list" *ngIf="expandedUnit === i">
+            <li class="lesson-item d-flex justify-content-between align-items-center"
+                *ngFor="let lesson of unit.lessons; let li = index"
+                [class.is-locked]="stateOf(lessonKey(i, li, lesson)) !== 'open' && stateOf(lessonKey(i, li, lesson)) !== 'passed'"
+                [class.is-current]="currentLesson()?.id === lessonKey(i, li, lesson)"
+                (click)="openAt(i, li, lesson)">
+              <span class="lesson-name">
+                <span class="lesson-icon">{{ stateOf(lessonKey(i, li, lesson)) === 'passed' ? '✓' : (stateOf(lessonKey(i, li, lesson)) === 'open' ? '▶' : '🔒') }}</span>
+                {{ lesson.title }}
+              </span>
+              <span class="d-flex align-items-center gap-3">
+                <span class="lesson-score" *ngIf="progress()[lessonKey(i, li, lesson)]?.bestScore !== undefined">امتحان {{ progress()[lessonKey(i, li, lesson)]!.bestScore }}%</span>
+                <span class="lesson-rating" *ngIf="lessonStats().get(lessonKey(i, li, lesson)) as st">★ {{ st.avg }} ({{ st.count }})</span>
+                <span class="lesson-duration">{{ lesson.duration }}</span>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Reviews tab -->
+      <div class="tab-panel" *ngIf="activeTab === 'reviews'">
+        <p class="empty-note" *ngIf="ratings().length === 0">مفيش تقييمات لسه، أول واحد يقيّم درس هيظهر هنا</p>
+
+        <div class="review-card" *ngFor="let r of ratings()">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <p class="review-name">{{ r.userName }}</p>
+            <span class="review-stars">{{ stars(r.stars) }}</span>
+          </div>
+          <p class="review-text">تقييم درس: {{ r.lessonTitle }}</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================= Sidebar ========================= -->
+    <div class="col-lg-4">
+      <div class="enroll-card">
+        <div class="enroll-price">{{ course().price }} ج.م</div>
+
+        <button type="button" class="btn btn-brass w-100 py-3 mb-3" *ngIf="!enrolled()" [disabled]="enrolling()" (click)="enroll()">
+          {{ enrolling() ? 'جاري الاشتراك...' : 'اشترك في الكورس' }}
+        </button>
+        <div class="enrolled-badge mb-3" *ngIf="enrolled()">✓ أنت مشترك في الكورس</div>
+        <p class="enroll-msg" *ngIf="enrollMsg()">{{ enrollMsg() }}</p>
+        <button type="button" class="btn btn-outline-brass w-100 py-3" [class.fav-on]="fav.isFav(course().id)" (click)="toggleFav()">
+          {{ fav.isFav(course().id) ? '♥ في المفضلة (دوس للإزالة)' : '♡ أضف للمفضلة' }}
+        </button>
+
+        <ul class="includes-list" *ngIf="course().includes.length > 0">
+          <li *ngFor="let item of course().includes"><span class="dot"></span> {{ item }}</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+</ng-container>
+
+<!-- ========================= إشعار التقييم ========================= -->
+<div class="rate-toast" *ngIf="toast() as t" role="status">
+  <ng-container *ngIf="t.kind === 'rate'">
+    <button type="button" class="toast-close" (click)="dismissToast()" aria-label="إغلاق">×</button>
+    <p class="toast-title">قيّم الدرس</p>
+    <p class="toast-lesson">{{ t.lessonTitle }}</p>
+    <div class="toast-stars" (mouseleave)="hover.set(0)">
+      <button type="button" class="star-btn" *ngFor="let n of starsArr"
+              [class.on]="(hover() || t.stars || 0) >= n"
+              (mouseenter)="hover.set(n)" (click)="submitRating(n)" [attr.aria-label]="n + ' نجوم'">★</button>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="t.kind === 'thanks'">
+    <p class="toast-title mb-1">شكرًا لتقييمك ✓</p>
+    <p class="toast-stars-static">{{ stars(t.stars || 0) }}</p>
+  </ng-container>
+
+  <ng-container *ngIf="t.kind === 'login'">
+    <button type="button" class="toast-close" (click)="dismissToast()" aria-label="إغلاق">×</button>
+    <p class="toast-title">سجّلي دخول عشان يتسجل تقدمك وتقيّمي الدرس</p>
+    <button type="button" class="btn btn-brass btn-sm px-3 mt-2" (click)="goLogin()">سجّل دخول الأول</button>
+  </ng-container>
+
+  <ng-container *ngIf="t.kind === 'error'">
+    <p class="toast-title mb-0">معرفتش أحفظ التقييم، جرّب تاني</p>
+  </ng-container>
+</div>

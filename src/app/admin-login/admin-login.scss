@@ -1,0 +1,42 @@
+$bg: #0e332b;
+$card-bg: #153f34;
+$brass: #b87333;
+$brass-light: #cf9a5c;
+$cream: #f2e6cd;
+$cream-dim: #c9bfa6;
+$border: rgba(184, 115, 51, 0.35);
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: $bg;
+  font-family: 'HT Moshreq Pro', sans-serif;
+}
+
+.login-section { min-height: 100vh; padding: 20px; }
+
+.login-box {
+  background: $card-bg;
+  border: 1px solid $border;
+  border-radius: 4px;
+  padding: 44px 38px;
+  width: 100%;
+  max-width: 380px;
+}
+
+.eyebrow { font-size: 13px; letter-spacing: 4px; color: $brass-light; margin-bottom: 12px; }
+.login-title { font-family: 'HT Rakeez', sans-serif; font-size: 24px; color: $cream; margin-bottom: 30px; }
+
+.form-label { color: $cream-dim; font-size: 14px; margin-bottom: 6px; }
+.form-control {
+  background: $bg; border: 1px solid $border; color: $cream; border-radius: 4px; padding: 10px 14px;
+  &:focus { background: $bg; border-color: $brass; color: $cream; box-shadow: 0 0 0 3px rgba(184,115,51,.15); }
+}
+
+.error-text { color: #e07856; font-size: 13.5px; margin-bottom: 10px; }
+
+.btn-brass {
+  background: $brass; color: $bg; border: none; border-radius: 2px; font-weight: 500;
+  &:hover { background: $brass-light; }
+  &:disabled { opacity: .6; }
+}
