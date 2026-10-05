@@ -1,24 +1,31 @@
 import { Injectable, Injector, inject, runInInjectionContext } from '@angular/core';
 import {
-  Firestore, collection, collectionData, doc, docData, setDoc, serverTimestamp
+  Firestore, collection, collectionData, collectionGroup, collectionSnapshots,
+  doc, docData, setDoc, serverTimestamp
 } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 
 export interface LessonProgress {
-  watched?: boolean;    // شاف الدرس كامل
-  passed?: boolean;     // خلّص الدرس (نجح في الامتحان، أو مفيش امتحان)
-  bestScore?: number;   // أعلى درجة % (لو فيه امتحان)
-  lastScore?: number;   // آخر درجة %
-  attempts?: number;    // عدد المحاولات
+  watched?: boolean;
+  passed?: boolean;
+  bestScore?: number;
+  lastScore?: number;
+  attempts?: number;
 }
 
 export interface CourseProgress {
   courseId: string;
   courseTitle: string;
+  userName?: string;
+  updatedAt?: any;
   lessons: Record<string, LessonProgress>;
 }
 
-/** درجة النجاح في الامتحان القصير */
+/** تقدم طالب في كورس (للأدمن) */
+export interface StudentCourseProgress extends CourseProgress {
+  uid: string;
+}
+
 export const PASS_PERCENT = 60;
 
 @Injectable({ providedIn: 'root' })
@@ -26,7 +33,6 @@ export class ProgressService {
   private firestore = inject(Firestore);
   private injector = inject(Injector);
 
-  /** تقدم الطالب في كورس واحد */
   getCourseProgress(uid: string, courseId: string): Observable<Record<string, LessonProgress>> {
     return runInInjectionContext(this.injector, () =>
       (docData(doc(this.firestore, `users/${uid}/progress/${courseId}`)) as Observable<CourseProgress | undefined>).pipe(
@@ -35,7 +41,6 @@ export class ProgressService {
     );
   }
 
-  /** تقدم الطالب في كل الكورسات */
   getAll(uid: string): Observable<CourseProgress[]> {
     return runInInjectionContext(this.injector, () =>
       (collectionData(collection(this.firestore, `users/${uid}/progress`), {
@@ -44,12 +49,34 @@ export class ProgressService {
     );
   }
 
-  /** merge: بيدمج الحصة دي من غير ما يمسح باقي الحصص */
-  saveLesson(uid: string, courseId: string, courseTitle: string, lessonId: string, data: LessonProgress) {
+  /** للأدمن: تقدم كل الطلاب في كل الكورسات */
+  getAllStudents(): Observable<StudentCourseProgress[]> {
+    return runInInjectionContext(this.injector, () =>
+      collectionSnapshots(collectionGroup(this.firestore, 'progress')).pipe(
+        map(snaps =>
+          snaps.map(s => ({
+            ...(s.data() as CourseProgress),
+            courseId: s.id,
+            uid: s.ref.parent.parent?.id ?? ''
+          }))
+        )
+      )
+    );
+  }
+
+  saveLesson(
+    uid: string, courseId: string, courseTitle: string, lessonId: string,
+    data: LessonProgress, userName?: string
+  ) {
     return runInInjectionContext(this.injector, () =>
       setDoc(
         doc(this.firestore, `users/${uid}/progress/${courseId}`),
-        { courseTitle, updatedAt: serverTimestamp(), lessons: { [lessonId]: data } },
+        {
+          courseTitle,
+          ...(userName ? { userName } : {}),
+          updatedAt: serverTimestamp(),
+          lessons: { [lessonId]: data }
+        },
         { merge: true }
       )
     );

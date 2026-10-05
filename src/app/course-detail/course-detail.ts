@@ -620,8 +620,11 @@ export class CourseDetail {
     const u = this.auth.currentUser();
     if (!u) return;
     try {
-      await this.progressService.saveLesson(u.uid, this.course().id, this.course().title, lessonId, data);
-    } catch (err) {
+      await this.progressService.saveLesson(
+        u.uid, this.course().id, this.course().title, lessonId, data,
+        this.auth.displayName() || 'طالب'
+      );
+        } catch (err) {
       console.error('progress save failed', err);
       this.showToast({ kind: 'error' }, 4000);
     }
@@ -640,7 +643,7 @@ export class CourseDetail {
     }
     const already = this.myRatings().get(lesson.id);
     if (already && !manual) return;
-
+    this.setTab('reviews');
     this.hover.set(0);
     this.showToast({ kind: 'rate', lessonId: lesson.id, lessonTitle: lesson.title, stars: already ?? 0 }, 12000);
   }

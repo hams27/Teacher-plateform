@@ -17,6 +17,9 @@
     <button type="button" class="tab-btn" [class.active]="activeTab() === 'testimonials'" (click)="setTab('testimonials')">
       آراء الطلاب
     </button>
+        <button type="button" class="tab-btn" [class.active]="activeTab() === 'progress'" (click)="setTab('progress')">
+      تقدم الطلاب
+    </button>
   </div>
 
   <!-- ========================= كورسات ========================= -->
@@ -142,7 +145,88 @@
       </table>
     </div>
   </div>
+  <!-- ========================= تقدم الطلاب ========================= -->
+  <div *ngIf="activeTab() === 'progress'" class="tab-content">
+    <div class="row g-3 align-items-center mb-3">
+      <div class="col-md-5">
+        <input type="text" class="form-control" placeholder="ابحث باسم الطالب..."
+               [ngModel]="studentSearch()" (ngModelChange)="studentSearch.set($event)">
+      </div>
+      <div class="col-md-4">
+        <select class="form-select" [ngModel]="courseFilter()" (ngModelChange)="courseFilter.set($event)">
+          <option value="all">كل الكورسات</option>
+          <option *ngFor="let c of courses()" [value]="c.id">{{ c.title }}</option>
+        </select>
+      </div>
+      <div class="col-md-3"><p class="section-count mb-0">{{ studentRows().length }} طالب</p></div>
+    </div>
 
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>الطالب</th>
+            <th>الكورسات</th>
+            <th>الدروس المكتملة</th>
+            <th>التقدم</th>
+            <th>متوسط الامتحانات</th>
+            <th>آخر نشاط</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let s of studentRows()">
+            <tr class="clickable" (click)="toggleStudent(s.uid)">
+              <td>{{ s.name }}</td>
+              <td>{{ s.courses.length }}</td>
+              <td>{{ s.done }} / {{ s.total }}</td>
+              <td><span class="mini-bar"><span [style.width.%]="s.pct"></span></span>{{ s.pct }}%</td>
+              <td>{{ s.avg !== null ? s.avg + '%' : '—' }}</td>
+              <td>{{ fmtDate(s.last) }}</td>
+              <td class="toggle-cell">{{ expandedStudent() === s.uid ? '−' : '+' }}</td>
+            </tr>
+
+            <tr class="detail-row" *ngIf="expandedStudent() === s.uid">
+              <td colspan="7">
+                <div class="sc-block" *ngFor="let c of s.courses">
+                  <div class="sc-head">
+                    <span class="sc-title">{{ c.title }}</span>
+                    <span class="sc-meta">
+                      {{ c.done }} / {{ c.total }} درس ({{ c.pct }}%)
+                      <ng-container *ngIf="c.avg !== null"> · متوسط الامتحانات {{ c.avg }}%</ng-container>
+                    </span>
+                  </div>
+                  <table class="sub-table">
+                    <thead><tr><th>الدرس</th><th>الحالة</th><th>أعلى درجة</th><th>المحاولات</th></tr></thead>
+                    <tbody>
+                      <tr *ngFor="let l of c.lessons">
+                        <td>{{ l.title }}</td>
+                        <td>
+                          <span class="tag ok" *ngIf="l.status === 'passed'">✓ مكتمل</span>
+                          <span class="tag wait" *ngIf="l.status === 'waiting'">في انتظار الامتحان</span>
+                          <span class="tag new" *ngIf="l.status === 'new'">لسه</span>
+                        </td>
+                        <td>
+                          <span class="score" [class.good]="l.score !== null && l.score >= passPercent"
+                                [class.low]="l.score !== null && l.score < passPercent">{{ l.score !== null ? l.score + '%' : '—' }}</span>
+                        </td>
+                        <td>{{ l.attempts || '—' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+
+          <tr *ngIf="progressLoading()"><td colspan="7" class="empty-row">جاري التحميل...</td></tr>
+          <tr *ngIf="!progressLoading() && studentRows().length === 0">
+            <td colspan="7" class="empty-row">مفيش تقدم متسجل لسه</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 <!-- ========================= مودال إضافة/تعديل كورس ========================= -->

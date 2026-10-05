@@ -58,4 +58,13 @@ export class EnrollmentsService {
       })
     );
   }
+
+    /** للأدمن: كل الاشتراكات النشطة */
+  getAll(): Observable<Enrollment[]> {
+    return runInInjectionContext(this.injector, () =>
+      (collectionData(collection(this.firestore, 'enrollments')) as Observable<Enrollment[]>).pipe(
+        map(list => list.filter(e => e.status === 'active'))
+      )
+    );
+  }
 }

@@ -243,8 +243,8 @@
 </ng-container>
 
 <!-- ========================= إشعار التقييم ========================= -->
-<div class="rate-toast" *ngIf="toast() as t" role="status">
-  <ng-container *ngIf="t.kind === 'rate'">
+<div class="rate-toast" *ngIf="activeTab === 'reviews' && toast() as t" role="status">
+    <ng-container *ngIf="t.kind === 'rate'">
     <button type="button" class="toast-close" (click)="dismissToast()" aria-label="إغلاق">×</button>
     <p class="toast-title">قيّم الدرس</p>
     <p class="toast-lesson">{{ t.lessonTitle }}</p>
