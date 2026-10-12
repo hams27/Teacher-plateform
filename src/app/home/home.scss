@@ -88,7 +88,19 @@ section { padding: 100px 0; scroll-margin-top: 70px; }
   background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.4) 50%, transparent 70%);
   animation: sweep 3.8s ease-in-out infinite;
 }
+// زرار القايمة (الهامبرجر) على الموبايل
+.navbar-toggler {
+  border-color: rgba($cream, 0.6);
+  padding: 6px 10px;
 
+  &:focus {
+    box-shadow: 0 0 0 3px rgba($brass-light, 0.4);
+  }
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23f2e6cd' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
 // ============ الهيدر ============
 .site-header {
   background: rgba(14, 51, 43, 0.82); backdrop-filter: blur(12px) saturate(1.3);
